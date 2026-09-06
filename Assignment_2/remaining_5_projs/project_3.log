@@ -1,14 +1,14 @@
-INFO:     Started server process [58373]
+INFO:     Started server process [11291]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://127.0.0.1:8003 (Press CTRL+C to quit)
-INFO:     127.0.0.1:53463 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53463 - "GET /static/css/styles.css HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53465 - "GET /static/js/app.js HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53465 - "GET /api/model/telemetry HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53463 - "GET /api/model/architecture HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53465 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:53470 - "GET /api/autoresearch/ledger HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53471 - "POST /api/model/kv-cache-calculator HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53473 - "GET /api/benchmarks/matrix HTTP/1.1" 200 OK
-INFO:     127.0.0.1:53474 - "GET /api/crisp-dm/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51565 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51565 - "GET /static/css/styles.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:51567 - "GET /static/js/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:51567 - "GET /api/model/telemetry HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51565 - "GET /api/model/architecture HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51567 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51573 - "GET /api/autoresearch/ledger HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51575 - "GET /api/benchmarks/matrix HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51576 - "GET /api/crisp-dm/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51577 - "POST /api/model/kv-cache-calculator HTTP/1.1" 200 OK
