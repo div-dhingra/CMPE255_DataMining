@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Skills Demonstration Platform | CRISP-DM Engine</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <h1>⚡ Agent Skills Demonstration Engine</h1>
+      <span class="badge badge-blue">IBM Telco Churn Benchmark</span>
+      <span class="badge badge-purple">46 Skills Embedded</span>
+      <span class="badge badge-green">CRISP-DM 6-Phase</span>
+    </div>
+    <div class="badge-row">
+      <span id="system-health" class="badge badge-green">● SYSTEM READY</span>
+    </div>
+  </header>
+
+  <!-- Tabs Navigation -->
+  <nav class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('crisp-dm')">1. CRISP-DM Lifecycle</button>
+    <button class="tab-btn" onclick="switchTab('skills')">2. Skills Catalog (46)</button>
+    <button class="tab-btn" onclick="switchTab('simulator')">3. Real-Time Churn Profiler</button>
+    <button class="tab-btn" onclick="switchTab('observability')">4. Executive KPI & Drift Observability</button>
+  </nav>
+
+  <div class="container">
+
+    <!-- TAB 1: CRISP-DM LIFECYCLE -->
+    <section id="tab-crisp-dm" class="tab-content active">
+      <!-- Top KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Annual Revenue at Risk</span>
+          <span class="kpi-value">$1,669,570</span>
+          <span class="kpi-sub">Baseline Churn: 26.54%</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Champion Model ROC-AUC</span>
+          <span class="kpi-value">0.8504</span>
+          <span class="kpi-sub">PR-AUC: 0.6730 | F1: 0.62</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Net Projected Profit Gain</span>
+          <span class="kpi-value">$259,734</span>
+          <span class="kpi-sub">+114.2% Campaign ROI</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Retained Customers</span>
+          <span class="kpi-value">627 / yr</span>
+          <span class="kpi-sub">A/B Trial Verified (p &lt; 0.001)</span>
+        </div>
+      </div>
+
+      <!-- Phase Cards Grid -->
+      <div id="phases-container" class="phase-grid">
+        <!-- Dynamically loaded by app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 2: SKILLS CATALOG BROWSER -->
+    <section id="tab-skills" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <span>Explore All 46 Skills</span>
+          <span id="skill-count-badge" class="badge badge-purple">46 Skills Available</span>
+        </div>
+        <div class="skills-controls">
+          <input type="text" id="skill-search" class="search-box" placeholder="Search by skill name, description, author, or keyword..." oninput="filterSkills()">
+          <button class="filter-btn active" onclick="setCategoryFilter('all')">All (46)</button>
+          <button class="filter-btn" onclick="setCategoryFilter('agent-ml-skills')">Agent ML (15)</button>
+          <button class="filter-btn" onclick="setCategoryFilter('01-data-quality-validation')">Data Quality (5)</button>
+          <button class="filter-btn" onclick="setCategoryFilter('02-documentation-knowledge')">Docs (5)</button>
+          <button class="filter-btn" onclick="setCategoryFilter('03-data-analysis-investigation')">Analysis (7)</button>
+          <button class="filter-btn" onclick="setCategoryFilter('04-data-storytelling-visualization')">Storytelling (5)</button>
+          <button class="filter-btn" onclick="setCategoryFilter('05-stakeholder-communication')">Stakeholders (5)</button>
+          <button class="filter-btn" onclick="setCategoryFilter('06-workflow-optimization')">Workflow (4)</button>
+        </div>
+
+        <table class="skills-table">
+          <thead>
+            <tr>
+              <th>Skill Name</th>
+              <th>Category</th>
+              <th>CRISP-DM Phase</th>
+              <th>Author</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="skills-table-body">
+            <!-- Dynamically populated by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 3: REAL-TIME CHURN SIMULATOR -->
+    <section id="tab-simulator" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <span>Customer Retention Profiler & Churn Simulator</span>
+          <span class="badge badge-blue">Live Model Scoring</span>
+        </div>
+
+        <div class="archetype-btns">
+          <span style="font-size: 0.85rem; color: var(--text-secondary); align-self: center;">Preset Archetypes:</span>
+          <button class="btn btn-sm btn-secondary" onclick="loadArchetype('high_risk')">🚨 High-Risk New Fiber Subscriber</button>
+          <button class="btn btn-sm btn-secondary" onclick="loadArchetype('loyal_multiplay')">🛡️ Loyal 2-Year Multi-Play Subscriber</button>
+          <button class="btn btn-sm btn-secondary" onclick="loadArchetype('moderate_dsl')">⚖️ Moderate-Risk DSL Streamer</button>
+        </div>
+
+        <div class="simulator-layout">
+          <!-- Form Inputs -->
+          <div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label">Tenure (Months): <span id="tenure-val" style="font-weight: bold; color: var(--accent-blue)">2</span></label>
+                <input type="range" id="sim-tenure" min="0" max="72" value="2" class="form-control" oninput="document.getElementById('tenure-val').innerText = this.value">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Monthly Charges ($): <span id="monthly-val" style="font-weight: bold; color: var(--accent-blue)">89.50</span></label>
+                <input type="range" id="sim-monthly" min="18" max="120" step="0.5" value="89.5" class="form-control" oninput="document.getElementById('monthly-val').innerText = parseFloat(this.value).toFixed(2)">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label">Contract Type</label>
+                <select id="sim-contract" class="form-control">
+                  <option value="Month-to-month">Month-to-month</option>
+                  <option value="One year">One year</option>
+                  <option value="Two year">Two year</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Internet Service</label>
+                <select id="sim-internet" class="form-control">
+                  <option value="Fiber optic">Fiber optic</option>
+                  <option value="DSL">DSL</option>
+                  <option value="No">No Internet</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label">Payment Method</label>
+                <select id="sim-payment" class="form-control">
+                  <option value="Electronic check">Electronic check</option>
+                  <option value="Mailed check">Mailed check</option>
+                  <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+                  <option value="Credit card (automatic)">Credit card (automatic)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tech Support Addon</label>
+                <select id="sim-techsupport" class="form-control">
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label class="form-label">Online Security</label>
+                <select id="sim-security" class="form-control">
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Online Backup</label>
+                <select id="sim-backup" class="form-control">
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Paperless Billing</label>
+                <select id="sim-paperless" class="form-control">
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn" style="width: 100%; margin-top: 0.5rem;" onclick="runPrediction()">⚡ Predict Customer Churn Risk</button>
+          </div>
+
+          <!-- Result Card -->
+          <div class="result-card">
+            <span style="font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase;">Predicted Churn Likelihood</span>
+            <div id="sim-score-circle" class="score-circle">
+              <span id="sim-score-pct" class="score-num">--%</span>
+              <span id="sim-risk-badge" class="badge" style="margin-top: 0.25rem;">ANALYZING</span>
+            </div>
+
+            <div style="width: 100%; text-align: left; margin-top: 1rem;">
+              <h4 style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--accent-blue)">Top Churn Risk Drivers:</h4>
+              <ul id="sim-risk-drivers" style="font-size: 0.85rem; padding-left: 1.25rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                <li>Run simulation to generate dynamic drivers</li>
+              </ul>
+
+              <h4 style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--accent-green)">Recommended Proactive Intervention:</h4>
+              <div id="sim-action-box" style="background-color: #1e293b; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; border-left: 3px solid var(--accent-green)">
+                Click "Predict Customer Churn Risk" to generate tailored action.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: EXECUTIVE KPI & OBSERVABILITY -->
+    <section id="tab-observability" class="tab-content">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Observability Status</span>
+          <span class="kpi-value" style="color: var(--accent-green)">HEALTHY</span>
+          <span class="kpi-sub">Prediction PSI: 0.0099 (Stable)</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Numerical KS Drift</span>
+          <span class="kpi-value">0 / 3 Drifted</span>
+          <span class="kpi-sub">All p-values &gt; 0.05</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Inference Latency SLA</span>
+          <span class="kpi-value">14.2 ms</span>
+          <span class="kpi-sub">p99: 42.1 ms (&lt; 100ms SLA)</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">A/B Test Significance</span>
+          <span class="kpi-value">p &lt; 0.001</span>
+          <span class="kpi-sub">z = 6.52 | ARR = +13.5%</span>
+        </div>
+      </div>
+
+      <div class="figure-grid">
+        <div class="card figure-card">
+          <div class="card-title">Model Performance: ROC & Precision-Recall Curves</div>
+          <img src="/artifacts/figures/roc_pr_curves.png" alt="ROC & PR Curves">
+        </div>
+        <div class="card figure-card">
+          <div class="card-title">Cohort Retention Heatmap (Tenure x Contract)</div>
+          <img src="/artifacts/figures/cohort_retention_heatmap.png" alt="Cohort Heatmap">
+        </div>
+        <div class="card figure-card">
+          <div class="card-title">Production Observability: Prediction & Feature Drift</div>
+          <img src="/artifacts/figures/ml_monitoring_drift.png" alt="ML Drift Plots">
+        </div>
+        <div class="card figure-card">
+          <div class="card-title">Dataset Distribution: Churn Class Imbalance</div>
+          <img src="/artifacts/figures/churn_distribution.png" alt="Churn Distribution">
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Modal for Skill / Artifact Inspection -->
+  <div id="modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Inspection View</h3>
+        <button class="btn btn-sm btn-secondary" onclick="closeModal()">✕ Close</button>
+      </div>
+      <div class="modal-body">
+        <pre id="modal-body-content">Loading...</pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

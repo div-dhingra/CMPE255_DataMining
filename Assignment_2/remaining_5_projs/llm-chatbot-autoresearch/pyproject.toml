@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-chatbot-autoresearch"
+version = "1.0.0"
+description = "SOTA PyTorch LLM with RoPE, SwiGLU, RMSNorm, GQA, KV-Cache, CRISP-DM Framework, Admin Dashboard, and Autoresearch Engine."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.22.0",
+    "numpy>=1.24.0",
+    "pydantic>=2.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+asyncio_mode = "auto"

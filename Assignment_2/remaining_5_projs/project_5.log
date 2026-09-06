@@ -1,0 +1,25 @@
+INFO:     Started server process [58376]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8005 (Press CTRL+C to quit)
+INFO:     127.0.0.1:53506 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53510 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53506 - "GET /static/style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53511 - "GET /artifacts/figures/roc_pr_curves.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53515 - "GET /artifacts/figures/ml_monitoring_drift.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53513 - "GET /artifacts/figures/cohort_retention_heatmap.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53516 - "GET /artifacts/figures/churn_distribution.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53511 - "GET /api/crisp/phases HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53513 - "GET /api/skills HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53513 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53515 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53591 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53591 - "GET /artifacts/figures/churn_distribution.png HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53601 - "GET /artifacts/figures/ml_monitoring_drift.png HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53597 - "GET /static/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53599 - "GET /artifacts/figures/roc_pr_curves.png HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53598 - "GET /static/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53600 - "GET /artifacts/figures/cohort_retention_heatmap.png HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53600 - "GET /api/crisp/phases HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53598 - "GET /api/skills HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53599 - "POST /api/predict HTTP/1.1" 200 OK

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOTA LLM Chatbot & Autoresearch Studio</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- Navigation Bar -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+          <i data-lucide="cpu" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-lg font-bold tracking-tight text-white">SOTA LLM Studio</h1>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">RoPE · SwiGLU · RMSNorm · GQA</span>
+          </div>
+          <p class="text-xs text-slate-400">CRISP-DM AI Engineering & Autoresearch Engine</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden md:flex space-x-1 bg-slate-950/60 p-1 rounded-xl border border-slate-800">
+        <button onclick="switchTab('chat')" id="nav-chat" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-medium text-white bg-blue-600 transition flex items-center space-x-1.5">
+          <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+          <span>Playground</span>
+        </button>
+        <button onclick="switchTab('architecture')" id="nav-architecture" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition flex items-center space-x-1.5">
+          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+          <span>KV-Cache & Model</span>
+        </button>
+        <button onclick="switchTab('autoresearch')" id="nav-autoresearch" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition flex items-center space-x-1.5">
+          <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+          <span>Autoresearch Studio</span>
+        </button>
+        <button onclick="switchTab('benchmarks')" id="nav-benchmarks" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition flex items-center space-x-1.5">
+          <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+          <span>Literature Matrix</span>
+        </button>
+        <button onclick="switchTab('crisp')" id="nav-crisp" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition flex items-center space-x-1.5">
+          <i data-lucide="workflow" class="w-3.5 h-3.5"></i>
+          <span>CRISP-DM Flow</span>
+        </button>
+      </nav>
+
+      <!-- Telemetry Status Pills -->
+      <div class="flex items-center space-x-3 text-xs">
+        <div class="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800">
+          <span class="pulse-dot"></span>
+          <span id="header-device" class="text-slate-300 font-mono">Connecting...</span>
+        </div>
+        <a href="/docs" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition flex items-center space-x-1 text-xs">
+          <span>OpenAPI</span>
+          <i data-lucide="external-link" class="w-3 h-3"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- =================================================================== -->
+    <!-- TAB 1: Chatbot Playground                                          -->
+    <!-- =================================================================== -->
+    <div id="tab-content-chat" class="tab-panel grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Chat Interface (2 Columns) -->
+      <div class="lg:col-span-2 flex flex-col h-[760px] glass-panel rounded-2xl overflow-hidden shadow-xl">
+        <!-- Chat Header -->
+        <div class="px-5 py-3.5 border-b border-slate-800 bg-slate-900/50 flex items-center justify-between">
+          <div class="flex items-center space-x-2.5">
+            <i data-lucide="bot" class="w-5 h-5 text-blue-400"></i>
+            <div>
+              <h2 class="text-sm font-semibold text-white">Interactive SOTA Chatbot</h2>
+              <p class="text-xs text-slate-400">Autoregressive generation with KV-Cache & ChatML templates</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="clearChat()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition flex items-center space-x-1">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Clear</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages Container -->
+        <div id="chat-messages" class="flex-1 p-5 overflow-y-auto space-y-4">
+          <!-- Initial Assistant Message -->
+          <div class="flex items-start space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center shrink-0">
+              <i data-lucide="cpu" class="w-4 h-4 text-blue-400"></i>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-none p-4 max-w-[85%] text-sm text-slate-200 shadow-sm leading-relaxed">
+              <p class="font-medium text-blue-400 mb-1">SOTA Transformer Assistant</p>
+              Welcome to the interactive chatbot! I am powered by a pure PyTorch decoder implementing <strong>Rotary Position Embeddings (RoPE)</strong>, <strong>SwiGLU</strong> activations, <strong>RMSNorm</strong>, and <strong>Grouped-Query Attention (GQA)</strong> with low-latency KV-cache. Ask me any architectural, CRISP-DM, or optimization questions!
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Prompt Chips -->
+        <div class="px-5 py-2 border-t border-slate-800/80 bg-slate-900/30 flex items-center space-x-2 overflow-x-auto text-xs text-slate-400">
+          <span class="shrink-0 text-slate-500">Suggested:</span>
+          <button onclick="sendPromptPreset('What is RoPE and how does it work?')" class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 shrink-0 transition">RoPE explanation</button>
+          <button onclick="sendPromptPreset('Why choose SwiGLU over GELU activations?')" class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 shrink-0 transition">SwiGLU vs GELU</button>
+          <button onclick="sendPromptPreset('How does GQA reduce KV-cache VRAM?')" class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 shrink-0 transition">GQA KV-cache</button>
+          <button onclick="sendPromptPreset('Explain the CRISP-DM framework for LLMs.')" class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 shrink-0 transition">CRISP-DM phases</button>
+        </div>
+
+        <!-- Prompt Input Area -->
+        <div class="p-4 border-t border-slate-800 bg-slate-900/60">
+          <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex items-center space-x-2">
+            <input type="text" id="chat-input" placeholder="Type your message or technical question..." class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" />
+            <button type="submit" id="send-btn" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition flex items-center space-x-1.5 shadow-lg shadow-blue-600/20">
+              <span>Send</span>
+              <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Controls & Live Telemetry HUD Sidebar (1 Column) -->
+      <div class="flex flex-col space-y-5">
+        
+        <!-- Live Performance HUD -->
+        <div class="glass-panel rounded-2xl p-5 shadow-xl">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center space-x-1.5">
+              <i data-lucide="gauge" class="w-4 h-4 text-emerald-400"></i>
+              <span>Live Generation HUD</span>
+            </h3>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Stream</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="glass-card p-3 rounded-xl">
+              <div class="text-[10px] text-slate-400 uppercase tracking-wide">Time To First Token</div>
+              <div id="hud-ttft" class="text-xl font-bold font-mono text-emerald-400 mt-1">-- ms</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">Prompt Prefill</div>
+            </div>
+            <div class="glass-card p-3 rounded-xl">
+              <div class="text-[10px] text-slate-400 uppercase tracking-wide">Decode Throughput</div>
+              <div id="hud-tps" class="text-xl font-bold font-mono text-blue-400 mt-1">-- tps</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">Tokens / Second</div>
+            </div>
+            <div class="glass-card p-3 rounded-xl">
+              <div class="text-[10px] text-slate-400 uppercase tracking-wide">KV-Cache Footprint</div>
+              <div id="hud-kv-mem" class="text-xl font-bold font-mono text-amber-400 mt-1">-- MB</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">Allocated Buffers</div>
+            </div>
+            <div class="glass-card p-3 rounded-xl">
+              <div class="text-[10px] text-slate-400 uppercase tracking-wide">Generated Tokens</div>
+              <div id="hud-total-tokens" class="text-xl font-bold font-mono text-purple-400 mt-1">0</div>
+              <div class="text-[10px] text-slate-500 mt-0.5">Cumulative Count</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sampling Parameter Controls -->
+        <div class="glass-panel rounded-2xl p-5 shadow-xl space-y-4">
+          <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center space-x-1.5">
+            <i data-lucide="sliders" class="w-4 h-4 text-blue-400"></i>
+            <span>Decoding Parameters</span>
+          </h3>
+
+          <!-- Temperature -->
+          <div>
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="text-slate-300 font-medium">Temperature</span>
+              <span id="val-temp" class="font-mono text-blue-400">0.70</span>
+            </div>
+            <input type="range" id="input-temp" min="0.0" max="1.5" step="0.05" value="0.70" oninput="updateParamVal('temp', this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+            <p class="text-[10px] text-slate-500 mt-1">Controls randomness (0.0 = greedy, 1.0+ = exploratory)</p>
+          </div>
+
+          <!-- Top-P Nucleus -->
+          <div>
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="text-slate-300 font-medium">Top-P (Nucleus)</span>
+              <span id="val-topp" class="font-mono text-blue-400">0.90</span>
+            </div>
+            <input type="range" id="input-topp" min="0.1" max="1.0" step="0.05" value="0.90" oninput="updateParamVal('topp', this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+            <p class="text-[10px] text-slate-500 mt-1">Holtzman et al. 2019 cumulative probability threshold</p>
+          </div>
+
+          <!-- Top-K -->
+          <div>
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="text-slate-300 font-medium">Top-K Filtering</span>
+              <span id="val-topk" class="font-mono text-blue-400">50</span>
+            </div>
+            <input type="range" id="input-topk" min="0" max="100" step="5" value="50" oninput="updateParamVal('topk', this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+            <p class="text-[10px] text-slate-500 mt-1">Limits next-token candidate pool to top K logits</p>
+          </div>
+
+          <!-- Repetition Penalty -->
+          <div>
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="text-slate-300 font-medium">Repetition Penalty</span>
+              <span id="val-reppen" class="font-mono text-blue-400">1.15</span>
+            </div>
+            <input type="range" id="input-reppen" min="1.0" max="2.0" step="0.05" value="1.15" oninput="updateParamVal('reppen', this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+            <p class="text-[10px] text-slate-500 mt-1">Keskar et al. 2019 logit dampening against cyclic loops</p>
+          </div>
+
+          <!-- Max New Tokens -->
+          <div>
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="text-slate-300 font-medium">Max Generation Tokens</span>
+              <span id="val-maxtok" class="font-mono text-blue-400">128</span>
+            </div>
+            <input type="range" id="input-maxtok" min="16" max="512" step="16" value="128" oninput="updateParamVal('maxtok', this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- TAB 2: Model Architecture & KV-Cache Explorer                       -->
+    <!-- =================================================================== -->
+    <div id="tab-content-architecture" class="tab-panel hidden space-y-6">
+      
+      <!-- Architectural Primitives Overview Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="glass-panel p-4 rounded-xl border-l-4 border-blue-500">
+          <div class="text-xs font-semibold text-blue-400">Positional Encoding</div>
+          <div class="text-base font-bold text-white mt-1">Rotary Embedding (RoPE)</div>
+          <div class="text-xs text-slate-400 mt-1">Su et al. (2021) 2D rotation matrix preserving relative position distance.</div>
+        </div>
+        <div class="glass-panel p-4 rounded-xl border-l-4 border-purple-500">
+          <div class="text-xs font-semibold text-purple-400">Activation Function</div>
+          <div class="text-base font-bold text-white mt-1">SwiGLU MLP</div>
+          <div class="text-xs text-slate-400 mt-1">Shazeer (2020) bilinear gated units with 8/3*dim expansion.</div>
+        </div>
+        <div class="glass-panel p-4 rounded-xl border-l-4 border-emerald-500">
+          <div class="text-xs font-semibold text-emerald-400">Normalization</div>
+          <div class="text-base font-bold text-white mt-1">Pre-RMSNorm</div>
+          <div class="text-xs text-slate-400 mt-1">Zhang & Sennrich (2019) root-mean-square scaling without mean subtraction.</div>
+        </div>
+        <div class="glass-panel p-4 rounded-xl border-l-4 border-amber-500">
+          <div class="text-xs font-semibold text-amber-400">Attention Architecture</div>
+          <div class="text-base font-bold text-white mt-1">Grouped-Query (GQA)</div>
+          <div class="text-xs text-slate-400 mt-1">Ainslie et al. (2023) shared KV heads reducing memory bandwidth demands.</div>
+        </div>
+      </div>
+
+      <!-- Interactive KV-Cache Memory Simulator -->
+      <div class="glass-panel p-6 rounded-2xl shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center space-x-2">
+              <i data-lucide="database" class="w-5 h-5 text-amber-400"></i>
+              <span>Interactive KV-Cache Memory Footprint Simulator</span>
+            </h3>
+            <p class="text-xs text-slate-400">Dynamically evaluates VRAM memory bounds: 2 × layers × batch × n_kv_heads × seq_len × head_dim × bytes</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Batch Size: <strong id="kv-batch-val" class="font-mono text-blue-400">1</strong></span>
+              </div>
+              <input type="range" id="kv-batch-input" min="1" max="32" step="1" value="1" oninput="runKVSimulation()" class="w-full h-1.5 bg-slate-800 rounded-lg accent-blue-500" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Sequence Context Length: <strong id="kv-seq-val" class="font-mono text-blue-400">1024</strong> tokens</span>
+              </div>
+              <input type="range" id="kv-seq-input" min="256" max="8192" step="256" value="1024" oninput="runKVSimulation()" class="w-full h-1.5 bg-slate-800 rounded-lg accent-blue-500" />
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300">Hidden Dimension: <strong id="kv-dim-val" class="font-mono text-blue-400">384</strong> (8 Query Heads)</span>
+              </div>
+              <input type="range" id="kv-dim-input" min="128" max="768" step="64" value="384" oninput="runKVSimulation()" class="w-full h-1.5 bg-slate-800 rounded-lg accent-blue-500" />
+            </div>
+          </div>
+
+          <!-- Comparison Table of Attention Modes -->
+          <div class="glass-card p-4 rounded-xl flex flex-col justify-between">
+            <h4 class="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Attention Paradigm Footprints (FP16):</h4>
+            <div class="space-y-2.5 text-xs font-mono">
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-300">MHA (8 KV Heads):</span>
+                <span id="kv-res-mha" class="text-red-400 font-bold">-- MB</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-300">GQA-4 (4 KV Heads):</span>
+                <span id="kv-res-gqa4" class="text-amber-400 font-bold">-- MB</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900/80 border border-blue-500/40 bg-blue-950/20">
+                <span class="text-blue-300 font-bold">GQA-2 (2 KV Heads, Our Model):</span>
+                <span id="kv-res-gqa2" class="text-emerald-400 font-bold">-- MB</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-300">MQA (1 KV Head):</span>
+                <span id="kv-res-mqa" class="text-purple-400 font-bold">-- MB</span>
+              </div>
+            </div>
+            <div id="kv-savings-summary" class="text-xs text-emerald-400 mt-2 text-right">
+              Calculated savings: 75.0% VRAM reduction over MHA
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attention Weight Visualizer -->
+      <div class="glass-panel p-6 rounded-2xl shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center space-x-2">
+              <i data-lucide="eye" class="w-5 h-5 text-blue-400"></i>
+              <span>GQA Attention Score Matrix Heatmap</span>
+            </h3>
+            <p class="text-xs text-slate-400">Inspect real attention weights computed by the decoder transformer blocks</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <input type="text" id="attn-prompt-input" value="Transformers use attention mechanisms" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white w-64 focus:outline-none focus:border-blue-500" />
+            <button onclick="fetchAttentionMatrix()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-medium text-white transition">Inspect</button>
+          </div>
+        </div>
+
+        <div id="attn-matrix-container" class="overflow-x-auto p-4 bg-slate-950/80 rounded-xl border border-slate-800">
+          <p class="text-xs text-slate-500 text-center py-6">Click 'Inspect' to compute attention matrix heatmap for the prompt.</p>
+        </div>
+      </div>
+
+      <!-- Layer Breakdown Diagnostics Table -->
+      <div class="glass-panel p-6 rounded-2xl shadow-xl">
+        <h3 class="text-base font-bold text-white mb-3 flex items-center space-x-2">
+          <i data-lucide="list" class="w-5 h-5 text-indigo-400"></i>
+          <span>Transformer Layer Parameter Breakdown</span>
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-900/60 text-slate-400 uppercase tracking-wider border-b border-slate-800">
+              <tr>
+                <th class="px-4 py-2.5">Layer Name</th>
+                <th class="px-4 py-2.5">Component Type</th>
+                <th class="px-4 py-2.5">Parameters</th>
+                <th class="px-4 py-2.5">Details & Specifications</th>
+              </tr>
+            </thead>
+            <tbody id="layer-table-body" class="divide-y divide-slate-800/60 text-slate-300 font-mono">
+              <!-- Loaded dynamically via API -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- TAB 3: Autoresearch Studio                                          -->
+    <!-- =================================================================== -->
+    <div id="tab-content-autoresearch" class="tab-panel hidden space-y-6">
+      
+      <!-- Studio Header & Action Controls -->
+      <div class="glass-panel p-5 rounded-2xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center space-x-2">
+            <h2 class="text-lg font-bold text-white">Autonomous Hill-Climbing Autoresearch Engine</h2>
+            <span id="autoresearch-status-badge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Active Exploration</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">Multi-objective hyperparameter optimization evaluating Loss, Perplexity, Throughput (TPS), and Memory footprint.</p>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button onclick="executeHillClimbStep()" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition flex items-center space-x-1.5 shadow-lg shadow-blue-600/20">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i>
+            <span>Execute 1 Step</span>
+          </button>
+          <button onclick="runMultipleSteps(5)" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium transition flex items-center space-x-1.5 shadow-lg shadow-indigo-600/20">
+            <i data-lucide="fast-forward" class="w-3.5 h-3.5"></i>
+            <span>Run 5 Steps</span>
+          </button>
+          <button onclick="runMultipleSteps(10)" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center space-x-1.5 border border-slate-700">
+            <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+            <span>Run 10 Steps</span>
+          </button>
+          <a href="/api/autoresearch/export/csv" target="_blank" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition flex items-center space-x-1 border border-slate-700">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>CSV</span>
+          </a>
+          <button onclick="resetAutoresearch()" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-red-900/50 text-slate-400 hover:text-red-300 text-xs transition border border-slate-700">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Summary KPI Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
+        <div class="glass-panel p-3.5 rounded-xl">
+          <div class="text-[10px] uppercase text-slate-400">Total Steps</div>
+          <div id="stat-total-steps" class="text-xl font-bold font-mono text-white mt-1">0</div>
+        </div>
+        <div class="glass-panel p-3.5 rounded-xl">
+          <div class="text-[10px] uppercase text-slate-400">Accepted Steps</div>
+          <div id="stat-accepted-steps" class="text-xl font-bold font-mono text-emerald-400 mt-1">0</div>
+        </div>
+        <div class="glass-panel p-3.5 rounded-xl">
+          <div class="text-[10px] uppercase text-slate-400">Acceptance Rate</div>
+          <div id="stat-accept-rate" class="text-xl font-bold font-mono text-blue-400 mt-1">0.0%</div>
+        </div>
+        <div class="glass-panel p-3.5 rounded-xl">
+          <div class="text-[10px] uppercase text-slate-400">Baseline Score</div>
+          <div id="stat-baseline-score" class="text-xl font-bold font-mono text-slate-300 mt-1">--</div>
+        </div>
+        <div class="glass-panel p-3.5 rounded-xl">
+          <div class="text-[10px] uppercase text-slate-400">Best Score</div>
+          <div id="stat-best-score" class="text-xl font-bold font-mono text-indigo-400 mt-1">--</div>
+        </div>
+        <div class="glass-panel p-3.5 rounded-xl">
+          <div class="text-[10px] uppercase text-slate-400">Score Improvement</div>
+          <div id="stat-improvement-pct" class="text-xl font-bold font-mono text-emerald-400 mt-1">+0.0%</div>
+        </div>
+      </div>
+
+      <!-- Live Trajectory Chart -->
+      <div class="glass-panel p-6 rounded-2xl shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+            <i data-lucide="line-chart" class="w-4 h-4 text-blue-400"></i>
+            <span>Hill-Climbing Trajectory (Composite Score & Throughput over Iterations)</span>
+          </h3>
+          <span class="text-xs text-slate-400 font-mono" id="chart-step-counter">0 data points</span>
+        </div>
+        <div class="h-64 w-full">
+          <canvas id="trajectoryChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Latest Parameter Delta Inspector & Experiment Ledger -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Parameter Delta Inspector (1 Col) -->
+        <div class="glass-panel p-5 rounded-2xl shadow-xl flex flex-col justify-between">
+          <div>
+            <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center space-x-1.5">
+              <i data-lucide="git-commit" class="w-4 h-4 text-purple-400"></i>
+              <span>Latest Proposal Delta Inspector</span>
+            </h3>
+            <div id="delta-inspector-body" class="space-y-2 text-xs font-mono">
+              <p class="text-slate-500 font-sans">No steps executed yet. Click 'Execute 1 Step' or 'Run 5 Steps' to start autonomous search.</p>
+            </div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+            <span>Aligned Literature:</span>
+            <span id="delta-literature-tag" class="text-blue-400 font-medium">None</span>
+          </div>
+        </div>
+
+        <!-- Experiment Ledger Table (2 Cols) -->
+        <div class="lg:col-span-2 glass-panel p-5 rounded-2xl shadow-xl">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center space-x-1.5">
+              <i data-lucide="history" class="w-4 h-4 text-amber-400"></i>
+              <span>Iteration Ledger (Step History)</span>
+            </h3>
+            <span class="text-[10px] text-slate-500">Auto-updates on each step</span>
+          </div>
+          <div class="overflow-x-auto max-h-72">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider border-b border-slate-800 sticky top-0">
+                <tr>
+                  <th class="px-3 py-2">Iter</th>
+                  <th class="px-3 py-2">Type</th>
+                  <th class="px-3 py-2">Decision</th>
+                  <th class="px-3 py-2">Score</th>
+                  <th class="px-3 py-2">Δ Score</th>
+                  <th class="px-3 py-2">Throughput</th>
+                  <th class="px-3 py-2">Memory</th>
+                </tr>
+              </thead>
+              <tbody id="ledger-table-body" class="divide-y divide-slate-800/60 font-mono text-slate-300">
+                <tr>
+                  <td colspan="7" class="text-center py-6 text-slate-500 font-sans">Experiment ledger is empty.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- TAB 4: Research Benchmark Matrix & Ablations                        -->
+    <!-- =================================================================== -->
+    <div id="tab-content-benchmarks" class="tab-panel hidden space-y-6">
+      
+      <!-- Landmark Literature Reference Cards -->
+      <div class="glass-panel p-6 rounded-2xl shadow-xl">
+        <h2 class="text-lg font-bold text-white mb-2 flex items-center space-x-2">
+          <i data-lucide="library" class="w-5 h-5 text-indigo-400"></i>
+          <span>Landmark Transformer Literature Alignment</span>
+        </h2>
+        <p class="text-xs text-slate-400 mb-5">Our architecture, primitives, and autoresearch bounds are grounded in foundational peer-reviewed literature.</p>
+
+        <div id="papers-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Populated dynamically via API -->
+        </div>
+      </div>
+
+      <!-- Comparative Architecture Benchmark Matrix -->
+      <div class="glass-panel p-6 rounded-2xl shadow-xl">
+        <h3 class="text-base font-bold text-white mb-3 flex items-center space-x-2">
+          <i data-lucide="scale" class="w-5 h-5 text-blue-400"></i>
+          <span>Comparative Benchmark Matrix (Literature Standards vs. Ours)</span>
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider border-b border-slate-800">
+              <tr>
+                <th class="px-4 py-3">Architecture & Paper</th>
+                <th class="px-4 py-3">Normalization</th>
+                <th class="px-4 py-3">Positional</th>
+                <th class="px-4 py-3">Activation</th>
+                <th class="px-4 py-3">Attention</th>
+                <th class="px-4 py-3">KV Cache (1k)</th>
+                <th class="px-4 py-3">Throughput</th>
+                <th class="px-4 py-3">Rel. PPL</th>
+              </tr>
+            </thead>
+            <tbody id="benchmark-matrix-body" class="divide-y divide-slate-800/60 font-mono text-slate-300">
+              <!-- Populated dynamically via API -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Empirical Ablation Studies -->
+      <div class="glass-panel p-6 rounded-2xl shadow-xl">
+        <h3 class="text-base font-bold text-white mb-3 flex items-center space-x-2">
+          <i data-lucide="git-pull-request" class="w-5 h-5 text-purple-400"></i>
+          <span>Empirical Ablation Studies Across Transformer Primitives</span>
+        </h3>
+        <div id="ablations-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Populated dynamically via API -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- TAB 5: CRISP-DM Flow Navigator                                      -->
+    <!-- =================================================================== -->
+    <div id="tab-content-crisp" class="tab-panel hidden space-y-6">
+      <div class="glass-panel p-6 rounded-2xl shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+              <i data-lucide="workflow" class="w-5 h-5 text-blue-400"></i>
+              <span>CRISP-DM AI Engineering Lifecycle</span>
+            </h2>
+            <p class="text-xs text-slate-400">Complete 6-phase data mining and engineering process documented in <code>docs/CRISP_DM.md</code></p>
+          </div>
+          <a href="/docs" class="text-xs text-blue-400 hover:text-blue-300 underline font-mono">View Full Specification</a>
+        </div>
+
+        <div id="crisp-phases-container" class="space-y-4">
+          <!-- Populated dynamically from /api/crisp-dm/summary -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-900 bg-slate-950 py-4 text-center text-xs text-slate-500">
+    SOTA LLM Chatbot & Autoresearch Engine · Built with PyTorch, RoPE, SwiGLU, RMSNorm, GQA, and FastAPI.
+  </footer>
+
+  <!-- App JavaScript -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

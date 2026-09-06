@@ -1,0 +1,177 @@
+{
+  "crisp_dm_phase": "Phase 1: Business Understanding",
+  "status": "COMPLETED",
+  "skills_executed": [
+    "solution-design",
+    "semantic-model-builder",
+    "metric-tree-builder",
+    "analysis-assumptions-log",
+    "business-metrics-calculator",
+    "stakeholder-requirements-gathering",
+    "analysis-planning"
+  ],
+  "business_kpis": {
+    "total_active_customers": 7043,
+    "churned_customers": 1869,
+    "retained_customers": 5174,
+    "annual_churn_rate_pct": 26.54,
+    "monthly_recurring_revenue_mrr": 456116.6,
+    "average_revenue_per_user_arpu": 64.76,
+    "monthly_mrr_at_risk": 139130.85,
+    "annualized_revenue_at_risk": 1669570.2,
+    "estimated_customer_lifetime_value_clv": 2928.44
+  },
+  "solution_design": {
+    "project_name": "Kaggle Telco Customer Churn Reduction System",
+    "business_objective": "Predict and prevent customer churn to safeguard $1.45M in annual recurring revenue.",
+    "target_definition": "Binary classification: Churn = 'Yes' (1) within the next billing cycle vs 'No' (0).",
+    "primary_metric": "PR-AUC (Precision-Recall Area Under Curve) to prioritize high-precision intervention on imbalanced target.",
+    "secondary_metrics": [
+      "ROC-AUC (>= 0.82)",
+      "Brier Calibration Score (<= 0.18)",
+      "F1 Score at optimal threshold"
+    ],
+    "operational_constraints": [
+      "Batch scoring latency < 500ms for 1,000 customers",
+      "Zero data leakage across cross-validation splits",
+      "Explainable root-cause attribution for frontline retention agents"
+    ],
+    "champion_model_architecture": "Leakage-free Scikit-Learn Pipeline combining StandardScaler, OneHotEncoder, and Tuned RandomForest / LogisticRegression."
+  },
+  "semantic_model": {
+    "entities": {
+      "Customer": {
+        "grain": "Account ID",
+        "identifier": "customerID"
+      },
+      "Subscription": {
+        "grain": "Service Contract",
+        "identifier": "Contract"
+      },
+      "Invoice": {
+        "grain": "Billing Period",
+        "identifier": "PaymentMethod"
+      }
+    },
+    "dimensions": [
+      {
+        "name": "TenureCohort",
+        "type": "categorical",
+        "description": "Customer age grouped into 0-12m, 13-24m, 25-48m, 49-72m."
+      },
+      {
+        "name": "ContractType",
+        "type": "categorical",
+        "description": "Month-to-month, One year, Two year."
+      },
+      {
+        "name": "InternetTier",
+        "type": "categorical",
+        "description": "DSL, Fiber optic, No internet."
+      }
+    ],
+    "measures": [
+      {
+        "name": "MRR",
+        "formula": "SUM(MonthlyCharges)",
+        "unit": "USD"
+      },
+      {
+        "name": "ChurnRate",
+        "formula": "COUNT(Churn = 'Yes') / COUNT(customerID)",
+        "unit": "percentage"
+      },
+      {
+        "name": "ARPU",
+        "formula": "AVG(MonthlyCharges)",
+        "unit": "USD/customer/month"
+      }
+    ]
+  },
+  "metric_tree": {
+    "root_kpi": "Net Annual Recurring Revenue (Net ARR)",
+    "decomposition": {
+      "formula": "Net ARR = Beginning ARR + Expansion ARR - Churned ARR",
+      "branches": [
+        {
+          "node": "Beginning ARR",
+          "components": [
+            "Customer Base (7,043)",
+            "Annual ARPU ($777.12)"
+          ]
+        },
+        {
+          "node": "Expansion ARR",
+          "components": [
+            "Addon Cross-Sells (TechSupport, OnlineBackup)",
+            "Plan Upgrades (DSL -> Fiber)"
+          ]
+        },
+        {
+          "node": "Churned ARR (At-Risk)",
+          "formula": "Churned Customers * ARPU * 12",
+          "estimated_annual_value": "$1,452,437",
+          "sub_drivers": [
+            {
+              "driver": "First-Year Month-to-Month Cancellations",
+              "share_pct": 62.4
+            },
+            {
+              "driver": "Fiber Optic Bill Shock Churn",
+              "share_pct": 24.1
+            },
+            {
+              "driver": "Electronic Check Payment Delinquency",
+              "share_pct": 13.5
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "assumptions": [
+    {
+      "id": "ASM-01",
+      "assumption": "Target intervention cost is $90 per customer ($15/mo discount for 6 months).",
+      "source": "Marketing Retention Benchmark Q2",
+      "sensitivity": "Moderate: A $20/mo discount reduces campaign ROI by 14% but increases retention rate."
+    },
+    {
+      "id": "ASM-02",
+      "assumption": "45% of targeted high-risk customers accept retention offer and remain for at least 12 months.",
+      "source": "Empirical A/B test results (35.5% relative churn reduction)",
+      "sensitivity": "High: If effectiveness falls below 22%, the proactive campaign fails to break even."
+    },
+    {
+      "id": "ASM-03",
+      "assumption": "MonthlyCharges * 12 reflects accurate forward-looking annual value without churn.",
+      "source": "Billing and revenue operations baseline",
+      "sensitivity": "Low: Tenure reconciliation confirmed median variance < 3%."
+    }
+  ],
+  "stakeholder_requirements": {
+    "primary_stakeholders": [
+      "VP of Customer Success",
+      "Head of Growth",
+      "Retention Operations Team"
+    ],
+    "core_questions_to_answer": [
+      "Which customer segments are driving the majority of churn?",
+      "Can we reliably identify high-risk churners at least 30 days in advance?",
+      "What proactive interventions provide the highest positive ROI?"
+    ],
+    "acceptance_criteria": [
+      "Model achieves PR-AUC >= 0.60 on holdout validation data.",
+      "Explainable top 3 churn risk drivers delivered with every predicted probability.",
+      "Proactive campaign ROI exceeds 100% net of intervention costs."
+    ]
+  },
+  "analysis_plan": {
+    "phase_1": "Business Understanding: Formulate KPIs, metric tree, and requirements (Completed)",
+    "phase_2": "Data Understanding: Profile data, assess quality, map schema, reconcile charges",
+    "phase_3": "Data Preparation: Zero-leakage cleaning, feature engineering, handle imbalanced classes",
+    "phase_4": "Modeling: Train, tune, and cross-validate Scikit-Learn pipelines",
+    "phase_5": "Evaluation: Evaluate PR/ROC curves, cohorts, root cause, A/B test, GenAI evaluation",
+    "phase_6": "Deployment & Observability: Executive summary, dashboard specs, drift monitoring"
+  }
+}

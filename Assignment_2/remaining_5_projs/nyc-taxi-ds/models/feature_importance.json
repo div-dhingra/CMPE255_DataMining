@@ -1,0 +1,662 @@
+{
+  "duration": {
+    "linear_regression": [
+      {
+        "feature": "manhattan_distance_km",
+        "importance": 45.58
+      },
+      {
+        "feature": "lon_diff",
+        "importance": 29.45
+      },
+      {
+        "feature": "lat_diff",
+        "importance": 22.86
+      },
+      {
+        "feature": "haversine_distance_km",
+        "importance": 1.22
+      },
+      {
+        "feature": "is_rush_hour",
+        "importance": 0.3
+      },
+      {
+        "feature": "is_overnight",
+        "importance": 0.24
+      },
+      {
+        "feature": "is_jfk_trip",
+        "importance": 0.17
+      },
+      {
+        "feature": "is_weekend",
+        "importance": 0.03
+      },
+      {
+        "feature": "is_lga_trip",
+        "importance": 0.03
+      },
+      {
+        "feature": "pickup_longitude",
+        "importance": 0.02
+      },
+      {
+        "feature": "dropoff_latitude",
+        "importance": 0.02
+      },
+      {
+        "feature": "bearing_degrees",
+        "importance": 0.02
+      },
+      {
+        "feature": "pickup_latitude",
+        "importance": 0.01
+      },
+      {
+        "feature": "dropoff_longitude",
+        "importance": 0.01
+      },
+      {
+        "feature": "passenger_count",
+        "importance": 0.01
+      },
+      {
+        "feature": "pickup_hour",
+        "importance": 0.01
+      },
+      {
+        "feature": "pickup_month",
+        "importance": 0.01
+      },
+      {
+        "feature": "directness_ratio",
+        "importance": 0.01
+      },
+      {
+        "feature": "pickup_dayofweek",
+        "importance": 0.0
+      },
+      {
+        "feature": "is_ewr_trip",
+        "importance": 0.0
+      }
+    ],
+    "ridge": [
+      {
+        "feature": "haversine_distance_km",
+        "importance": 53.0
+      },
+      {
+        "feature": "is_rush_hour",
+        "importance": 15.47
+      },
+      {
+        "feature": "is_overnight",
+        "importance": 12.43
+      },
+      {
+        "feature": "is_jfk_trip",
+        "importance": 9.57
+      },
+      {
+        "feature": "is_weekend",
+        "importance": 1.44
+      },
+      {
+        "feature": "pickup_longitude",
+        "importance": 1.29
+      },
+      {
+        "feature": "is_lga_trip",
+        "importance": 1.1
+      },
+      {
+        "feature": "bearing_degrees",
+        "importance": 0.81
+      },
+      {
+        "feature": "manhattan_distance_km",
+        "importance": 0.76
+      },
+      {
+        "feature": "lon_diff",
+        "importance": 0.65
+      },
+      {
+        "feature": "dropoff_latitude",
+        "importance": 0.61
+      },
+      {
+        "feature": "pickup_hour",
+        "importance": 0.61
+      },
+      {
+        "feature": "pickup_month",
+        "importance": 0.61
+      },
+      {
+        "feature": "pickup_latitude",
+        "importance": 0.47
+      },
+      {
+        "feature": "lat_diff",
+        "importance": 0.41
+      },
+      {
+        "feature": "passenger_count",
+        "importance": 0.27
+      },
+      {
+        "feature": "dropoff_longitude",
+        "importance": 0.26
+      },
+      {
+        "feature": "directness_ratio",
+        "importance": 0.2
+      },
+      {
+        "feature": "pickup_dayofweek",
+        "importance": 0.04
+      },
+      {
+        "feature": "is_ewr_trip",
+        "importance": 0.0
+      }
+    ],
+    "random_forest": [
+      {
+        "feature": "haversine_distance_km",
+        "importance": 53.91
+      },
+      {
+        "feature": "is_rush_hour",
+        "importance": 14.38
+      },
+      {
+        "feature": "manhattan_distance_km",
+        "importance": 13.61
+      },
+      {
+        "feature": "is_overnight",
+        "importance": 4.95
+      },
+      {
+        "feature": "pickup_hour",
+        "importance": 2.4
+      },
+      {
+        "feature": "lat_diff",
+        "importance": 2.01
+      },
+      {
+        "feature": "lon_diff",
+        "importance": 1.76
+      },
+      {
+        "feature": "pickup_latitude",
+        "importance": 0.96
+      },
+      {
+        "feature": "dropoff_longitude",
+        "importance": 0.95
+      },
+      {
+        "feature": "dropoff_latitude",
+        "importance": 0.92
+      },
+      {
+        "feature": "pickup_longitude",
+        "importance": 0.89
+      },
+      {
+        "feature": "directness_ratio",
+        "importance": 0.74
+      },
+      {
+        "feature": "bearing_degrees",
+        "importance": 0.72
+      },
+      {
+        "feature": "pickup_dayofweek",
+        "importance": 0.57
+      },
+      {
+        "feature": "pickup_month",
+        "importance": 0.39
+      },
+      {
+        "feature": "is_jfk_trip",
+        "importance": 0.37
+      },
+      {
+        "feature": "is_weekend",
+        "importance": 0.25
+      },
+      {
+        "feature": "passenger_count",
+        "importance": 0.21
+      },
+      {
+        "feature": "is_lga_trip",
+        "importance": 0.02
+      },
+      {
+        "feature": "is_ewr_trip",
+        "importance": 0.0
+      }
+    ],
+    "gradient_boosting": [
+      {
+        "feature": "pickup_longitude",
+        "importance": 5.0
+      },
+      {
+        "feature": "pickup_latitude",
+        "importance": 5.0
+      },
+      {
+        "feature": "dropoff_longitude",
+        "importance": 5.0
+      },
+      {
+        "feature": "dropoff_latitude",
+        "importance": 5.0
+      },
+      {
+        "feature": "passenger_count",
+        "importance": 5.0
+      },
+      {
+        "feature": "haversine_distance_km",
+        "importance": 5.0
+      },
+      {
+        "feature": "manhattan_distance_km",
+        "importance": 5.0
+      },
+      {
+        "feature": "bearing_degrees",
+        "importance": 5.0
+      },
+      {
+        "feature": "pickup_hour",
+        "importance": 5.0
+      },
+      {
+        "feature": "pickup_dayofweek",
+        "importance": 5.0
+      },
+      {
+        "feature": "pickup_month",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_weekend",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_rush_hour",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_overnight",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_jfk_trip",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_lga_trip",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_ewr_trip",
+        "importance": 5.0
+      },
+      {
+        "feature": "directness_ratio",
+        "importance": 5.0
+      },
+      {
+        "feature": "lat_diff",
+        "importance": 5.0
+      },
+      {
+        "feature": "lon_diff",
+        "importance": 5.0
+      }
+    ]
+  },
+  "fare": {
+    "linear_regression": [
+      {
+        "feature": "manhattan_distance_km",
+        "importance": 44.37
+      },
+      {
+        "feature": "lon_diff",
+        "importance": 28.77
+      },
+      {
+        "feature": "lat_diff",
+        "importance": 22.34
+      },
+      {
+        "feature": "haversine_distance_km",
+        "importance": 2.95
+      },
+      {
+        "feature": "is_jfk_trip",
+        "importance": 1.09
+      },
+      {
+        "feature": "is_rush_hour",
+        "importance": 0.24
+      },
+      {
+        "feature": "is_overnight",
+        "importance": 0.13
+      },
+      {
+        "feature": "is_weekend",
+        "importance": 0.03
+      },
+      {
+        "feature": "pickup_longitude",
+        "importance": 0.01
+      },
+      {
+        "feature": "pickup_latitude",
+        "importance": 0.01
+      },
+      {
+        "feature": "dropoff_longitude",
+        "importance": 0.01
+      },
+      {
+        "feature": "dropoff_latitude",
+        "importance": 0.01
+      },
+      {
+        "feature": "bearing_degrees",
+        "importance": 0.01
+      },
+      {
+        "feature": "pickup_month",
+        "importance": 0.01
+      },
+      {
+        "feature": "is_lga_trip",
+        "importance": 0.01
+      },
+      {
+        "feature": "passenger_count",
+        "importance": 0.0
+      },
+      {
+        "feature": "pickup_hour",
+        "importance": 0.0
+      },
+      {
+        "feature": "pickup_dayofweek",
+        "importance": 0.0
+      },
+      {
+        "feature": "is_ewr_trip",
+        "importance": 0.0
+      },
+      {
+        "feature": "directness_ratio",
+        "importance": 0.0
+      }
+    ],
+    "ridge": [
+      {
+        "feature": "haversine_distance_km",
+        "importance": 56.99
+      },
+      {
+        "feature": "is_jfk_trip",
+        "importance": 23.32
+      },
+      {
+        "feature": "is_rush_hour",
+        "importance": 5.35
+      },
+      {
+        "feature": "manhattan_distance_km",
+        "importance": 3.05
+      },
+      {
+        "feature": "is_overnight",
+        "importance": 2.97
+      },
+      {
+        "feature": "lon_diff",
+        "importance": 2.89
+      },
+      {
+        "feature": "lat_diff",
+        "importance": 2.36
+      },
+      {
+        "feature": "directness_ratio",
+        "importance": 0.79
+      },
+      {
+        "feature": "is_weekend",
+        "importance": 0.66
+      },
+      {
+        "feature": "pickup_longitude",
+        "importance": 0.37
+      },
+      {
+        "feature": "dropoff_latitude",
+        "importance": 0.25
+      },
+      {
+        "feature": "is_lga_trip",
+        "importance": 0.25
+      },
+      {
+        "feature": "bearing_degrees",
+        "importance": 0.24
+      },
+      {
+        "feature": "pickup_latitude",
+        "importance": 0.18
+      },
+      {
+        "feature": "pickup_month",
+        "importance": 0.12
+      },
+      {
+        "feature": "passenger_count",
+        "importance": 0.08
+      },
+      {
+        "feature": "pickup_dayofweek",
+        "importance": 0.05
+      },
+      {
+        "feature": "pickup_hour",
+        "importance": 0.04
+      },
+      {
+        "feature": "dropoff_longitude",
+        "importance": 0.02
+      },
+      {
+        "feature": "is_ewr_trip",
+        "importance": 0.0
+      }
+    ],
+    "random_forest": [
+      {
+        "feature": "haversine_distance_km",
+        "importance": 74.51
+      },
+      {
+        "feature": "manhattan_distance_km",
+        "importance": 17.12
+      },
+      {
+        "feature": "is_jfk_trip",
+        "importance": 6.27
+      },
+      {
+        "feature": "is_rush_hour",
+        "importance": 0.64
+      },
+      {
+        "feature": "lat_diff",
+        "importance": 0.44
+      },
+      {
+        "feature": "pickup_longitude",
+        "importance": 0.21
+      },
+      {
+        "feature": "lon_diff",
+        "importance": 0.17
+      },
+      {
+        "feature": "is_overnight",
+        "importance": 0.12
+      },
+      {
+        "feature": "dropoff_longitude",
+        "importance": 0.11
+      },
+      {
+        "feature": "pickup_latitude",
+        "importance": 0.08
+      },
+      {
+        "feature": "dropoff_latitude",
+        "importance": 0.08
+      },
+      {
+        "feature": "pickup_hour",
+        "importance": 0.08
+      },
+      {
+        "feature": "bearing_degrees",
+        "importance": 0.05
+      },
+      {
+        "feature": "directness_ratio",
+        "importance": 0.04
+      },
+      {
+        "feature": "pickup_dayofweek",
+        "importance": 0.03
+      },
+      {
+        "feature": "pickup_month",
+        "importance": 0.03
+      },
+      {
+        "feature": "passenger_count",
+        "importance": 0.02
+      },
+      {
+        "feature": "is_weekend",
+        "importance": 0.01
+      },
+      {
+        "feature": "is_lga_trip",
+        "importance": 0.01
+      },
+      {
+        "feature": "is_ewr_trip",
+        "importance": 0.0
+      }
+    ],
+    "gradient_boosting": [
+      {
+        "feature": "pickup_longitude",
+        "importance": 5.0
+      },
+      {
+        "feature": "pickup_latitude",
+        "importance": 5.0
+      },
+      {
+        "feature": "dropoff_longitude",
+        "importance": 5.0
+      },
+      {
+        "feature": "dropoff_latitude",
+        "importance": 5.0
+      },
+      {
+        "feature": "passenger_count",
+        "importance": 5.0
+      },
+      {
+        "feature": "haversine_distance_km",
+        "importance": 5.0
+      },
+      {
+        "feature": "manhattan_distance_km",
+        "importance": 5.0
+      },
+      {
+        "feature": "bearing_degrees",
+        "importance": 5.0
+      },
+      {
+        "feature": "pickup_hour",
+        "importance": 5.0
+      },
+      {
+        "feature": "pickup_dayofweek",
+        "importance": 5.0
+      },
+      {
+        "feature": "pickup_month",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_weekend",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_rush_hour",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_overnight",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_jfk_trip",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_lga_trip",
+        "importance": 5.0
+      },
+      {
+        "feature": "is_ewr_trip",
+        "importance": 5.0
+      },
+      {
+        "feature": "directness_ratio",
+        "importance": 5.0
+      },
+      {
+        "feature": "lat_diff",
+        "importance": 5.0
+      },
+      {
+        "feature": "lon_diff",
+        "importance": 5.0
+      }
+    ]
+  }
+}

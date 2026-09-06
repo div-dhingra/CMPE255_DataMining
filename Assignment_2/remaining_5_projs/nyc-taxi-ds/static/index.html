@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NYC Taxi ML & Trip Estimation Platform | CRISP-DM</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Navigation Bar -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="logo-icon"><i class="fa-solid fa-taxi"></i></div>
+        <div class="brand-text">
+          <h1>NYC Taxi DS <span>Predictor</span></h1>
+          <p class="subtitle">CRISP-DM Machine Learning Platform</p>
+        </div>
+      </div>
+      <div class="nav-controls">
+        <button id="btnTabMap" class="nav-tab-btn active"><i class="fa-solid fa-map-location-dot"></i> Live Trip Estimator</button>
+        <button id="btnTabModels" class="nav-tab-btn"><i class="fa-solid fa-chart-line"></i> Model Evaluation</button>
+        <button id="btnTabCrisp" class="nav-tab-btn"><i class="fa-solid fa-diagram-project"></i> CRISP-DM Framework</button>
+        <div class="status-indicator">
+          <span class="status-dot online"></span>
+          <span id="apiStatusText">Models Ready</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-body">
+      <!-- TAB 1: Live Trip Estimator & Map -->
+      <section id="tabMap" class="tab-pane active">
+        <div class="map-workspace">
+          <!-- Left Control Panel -->
+          <aside class="sidebar-panel">
+            <!-- Preset Landmark Routes -->
+            <div class="card preset-card">
+              <div class="card-header">
+                <h3><i class="fa-solid fa-star"></i> Iconic NYC Presets</h3>
+              </div>
+              <div class="preset-pills" id="presetButtons">
+                <!-- Dynamically populated or static fallbacks -->
+                <button class="preset-btn" data-preset="jfk_to_midtown">✈️ JFK → Times Sq</button>
+                <button class="preset-btn" data-preset="wall_st_to_grand_central">💼 Wall St → Grand Central</button>
+                <button class="preset-btn" data-preset="times_square_to_brooklyn">🌉 Times Sq → Brooklyn</button>
+                <button class="preset-btn" data-preset="lga_to_central_park">🛫 LGA → Central Park</button>
+                <button class="preset-btn" data-preset="midtown_to_yankee_stadium">⚾ Midtown → Yankee Stadium</button>
+              </div>
+            </div>
+
+            <!-- Trip Config Form -->
+            <div class="card form-card">
+              <div class="card-header">
+                <h3><i class="fa-solid fa-sliders"></i> Trip Parameters</h3>
+              </div>
+              
+              <div class="form-group">
+                <label><i class="fa-solid fa-location-dot text-green"></i> Pickup Location</label>
+                <div class="coord-display">
+                  <span id="pickupLabel">Times Square (40.7580, -73.9855)</span>
+                </div>
+                <div class="landmark-select-wrapper">
+                  <select id="pickupLandmarkSelect" class="form-select">
+                    <option value="">-- Choose Preset or Drag Pin --</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label><i class="fa-solid fa-location-pin text-red"></i> Dropoff Location</label>
+                <div class="coord-display">
+                  <span id="dropoffLabel">Brooklyn Bridge (40.7061, -73.9969)</span>
+                </div>
+                <div class="landmark-select-wrapper">
+                  <select id="dropoffLandmarkSelect" class="form-select">
+                    <option value="">-- Choose Preset or Drag Pin --</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-half">
+                  <label><i class="fa-solid fa-user-group"></i> Passengers</label>
+                  <select id="passengerCount" class="form-select">
+                    <option value="1">1 Passenger</option>
+                    <option value="2">2 Passengers</option>
+                    <option value="3">3 Passengers</option>
+                    <option value="4">4 Passengers</option>
+                    <option value="5">5 Passengers</option>
+                    <option value="6">6 Passengers</option>
+                  </select>
+                </div>
+                <div class="form-group col-half">
+                  <label><i class="fa-solid fa-brain"></i> ML Model</label>
+                  <select id="modelSelect" class="form-select">
+                    <option value="gradient_boosting" selected>Gradient Boosting (Best)</option>
+                    <option value="random_forest">Random Forest</option>
+                    <option value="ridge">Ridge Regression</option>
+                    <option value="linear_regression">Linear Regression</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label><i class="fa-regular fa-clock"></i> Departure Time / Traffic Scenario</label>
+                <div class="quick-time-buttons">
+                  <button type="button" class="time-quick-btn active" data-time="morning_rush">Morning Rush (8:30 AM)</button>
+                  <button type="button" class="time-quick-btn" data-time="midday">Midday (1:30 PM)</button>
+                  <button type="button" class="time-quick-btn" data-time="evening_rush">Evening Rush (5:45 PM)</button>
+                  <button type="button" class="time-quick-btn" data-time="late_night">Late Night (2:00 AM)</button>
+                </div>
+                <input type="datetime-local" id="pickupDateTimeInput" class="form-input" />
+              </div>
+
+              <button id="btnCalculate" class="btn-primary">
+                <i class="fa-solid fa-bolt"></i> Run ML Trip Prediction
+              </button>
+            </div>
+          </aside>
+
+          <!-- Center: Map View -->
+          <div class="map-container-wrapper">
+            <div id="leafletMap"></div>
+            <div class="map-overlay-tip">
+              <i class="fa-solid fa-circle-info"></i> Drag markers on the map to recalculate route in real time.
+            </div>
+          </div>
+
+          <!-- Right Estimation & Explanation Panel -->
+          <aside class="sidebar-panel results-panel">
+            <div class="card estimation-card">
+              <div class="card-header">
+                <h3><i class="fa-solid fa-calculator"></i> ML Estimation</h3>
+                <span class="badge" id="activeModelBadge">Gradient Boosting</span>
+              </div>
+
+              <!-- Big Metric Tiles -->
+              <div class="metric-tiles-grid">
+                <div class="metric-tile highlight-time">
+                  <div class="metric-icon"><i class="fa-solid fa-stopwatch"></i></div>
+                  <div class="metric-content">
+                    <span class="metric-label">Estimated Duration</span>
+                    <span class="metric-value" id="predDuration">18m 42s</span>
+                    <span class="metric-sub" id="predDurationMinutes">~18.7 minutes</span>
+                  </div>
+                </div>
+
+                <div class="metric-tile highlight-fare">
+                  <div class="metric-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                  <div class="metric-content">
+                    <span class="metric-label">Estimated Fare</span>
+                    <span class="metric-value" id="predFare">$24.80</span>
+                    <span class="metric-sub">Tolls & Surcharges included</span>
+                  </div>
+                </div>
+
+                <div class="metric-tile">
+                  <div class="metric-icon"><i class="fa-solid fa-route"></i></div>
+                  <div class="metric-content">
+                    <span class="metric-label">Trip Distance</span>
+                    <span class="metric-value" id="predDistance">4.62 mi</span>
+                    <span class="metric-sub" id="predDistanceKm">7.44 km (Manhattan: 8.9 km)</span>
+                  </div>
+                </div>
+
+                <div class="metric-tile">
+                  <div class="metric-icon"><i class="fa-solid fa-traffic-light"></i></div>
+                  <div class="metric-content">
+                    <span class="metric-label">Congestion Factor</span>
+                    <span class="metric-value" id="predCongestion">1.45x</span>
+                    <span class="metric-sub" id="predCongestionLevel">Moderate City Traffic</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Model Explanation Breakdown -->
+              <div class="explanation-section">
+                <h4><i class="fa-solid fa-chart-pie"></i> Model Explanation Breakdown</h4>
+                
+                <div class="breakdown-group">
+                  <div class="breakdown-title">Fare Composition Breakdown ($)</div>
+                  <div class="progress-bar-stack" id="fareStack">
+                    <div class="bar-seg seg-base" style="width: 20%;" title="Base Flag Drop">Base $3.00</div>
+                    <div class="bar-seg seg-dist" style="width: 50%;" title="Mileage Charge">Distance</div>
+                    <div class="bar-seg seg-traffic" style="width: 20%;" title="Traffic Delay">Delay</div>
+                    <div class="bar-seg seg-surcharge" style="width: 10%;" title="Surcharges / Airport">Surge</div>
+                  </div>
+                  <div class="breakdown-legend">
+                    <span class="dot-base">Base Meter ($3)</span>
+                    <span class="dot-dist">Distance</span>
+                    <span class="dot-traffic">Traffic/Idle</span>
+                    <span class="dot-surge">Airport/Surge</span>
+                  </div>
+                </div>
+
+                <div class="breakdown-group">
+                  <div class="breakdown-title">Duration Component Decomposition</div>
+                  <div class="duration-bars">
+                    <div class="dur-row">
+                      <span>Free-flow Travel:</span>
+                      <strong id="durFreeFlow">12m 10s</strong>
+                    </div>
+                    <div class="dur-row">
+                      <span>Traffic & Signal Delay:</span>
+                      <strong id="durDelay" class="text-orange">+6m 32s</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="breakdown-group">
+                  <div class="breakdown-title">Geographic & Route Context</div>
+                  <div class="context-grid">
+                    <div class="context-item">
+                      <span class="ctx-label">Pickup Borough</span>
+                      <strong id="pickupBorough">Manhattan</strong>
+                    </div>
+                    <div class="context-item">
+                      <span class="ctx-label">Dropoff Borough</span>
+                      <strong id="dropoffBorough">Brooklyn</strong>
+                    </div>
+                    <div class="context-item">
+                      <span class="ctx-label">Grid Bearing</span>
+                      <strong id="bearingVal">154.2° (SE)</strong>
+                    </div>
+                    <div class="context-item">
+                      <span class="ctx-label">Airport Surcharge</span>
+                      <strong id="airportFlag">Standard ($0)</strong>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- TAB 2: Model Evaluation & Multi-Model Comparison -->
+      <section id="tabModels" class="tab-pane">
+        <div class="analytics-container">
+          <div class="section-title">
+            <h2>Phase 4 & 5: Multi-Model Evaluation & Cross-Validation</h2>
+            <p>Benchmarking Linear Regression, Ridge, Random Forest, and Gradient Boosting on holdout test partitions.</p>
+          </div>
+
+          <div class="tables-grid">
+            <!-- Duration Models Comparison -->
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fa-solid fa-clock"></i> Trip Duration Model Leaderboard</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table" id="durationModelTable">
+                  <thead>
+                    <tr>
+                      <th>Model Architecture</th>
+                      <th>CV RMSE (s)</th>
+                      <th>Test RMSE (s)</th>
+                      <th>Test RMSLE</th>
+                      <th>Test MAE (s)</th>
+                      <th>Test R² Score</th>
+                      <th>Train Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Injected via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Fare Models Comparison -->
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fa-solid fa-dollar-sign"></i> Fare Amount Model Leaderboard</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table" id="fareModelTable">
+                  <thead>
+                    <tr>
+                      <th>Model Architecture</th>
+                      <th>CV RMSE ($)</th>
+                      <th>Test RMSE ($)</th>
+                      <th>Test MAE ($)</th>
+                      <th>Test R² Score</th>
+                      <th>Train Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Injected via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Importance Rankings -->
+          <div class="card mt-20">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-ranking-star"></i> Feature Importance Ranking (Tree Ensemble Attributions)</h3>
+            </div>
+            <div class="feature-importance-bars" id="featureImportanceContainer">
+              <!-- Injected via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: CRISP-DM Framework Documentation -->
+      <section id="tabCrisp" class="tab-pane">
+        <div class="crisp-container">
+          <div class="section-title">
+            <h2>The CRISP-DM 6-Phase Lifecycle for NYC Taxi DS</h2>
+            <p>Cross-Industry Standard Process for Data Mining execution breakdown for this production pipeline.</p>
+          </div>
+
+          <div class="crisp-steps-grid">
+            <div class="crisp-card">
+              <div class="step-badge">Phase 1</div>
+              <h3>Business Understanding</h3>
+              <p>Formulate fleet routing optimization and transparent fare/ETA prediction for riders and dispatchers. Formulate primary optimization targets (trip_duration, fare_amount) and loss objectives (RMSE, RMSLE, MAE).</p>
+            </div>
+
+            <div class="crisp-card">
+              <div class="step-badge">Phase 2</div>
+              <h3>Data Understanding</h3>
+              <p>Incorporate Kaggle NYC Taxi schema with latitude/longitude coordinates, timestamps, and passenger counts. Perform NYC geographic bounding box sanitization, temporal density profiling, and spatial hotspot clustering.</p>
+            </div>
+
+            <div class="crisp-card">
+              <div class="step-badge">Phase 3</div>
+              <h3>Data Preparation</h3>
+              <p>Geospatial transformations including spherical Haversine, orthogonal Manhattan L1 distance, bearing degrees, airport radial detection (JFK, LGA, EWR), rush-hour & overnight flags, and standard feature scaling.</p>
+            </div>
+
+            <div class="crisp-card">
+              <div class="step-badge">Phase 4</div>
+              <h3>Modeling</h3>
+              <p>Multi-model exploration across linear baselines (Linear Regression, Ridge L2) and non-linear ensembles (Random Forest, HistGradientBoosting) with K-Fold cross-validation.</p>
+            </div>
+
+            <div class="crisp-card">
+              <div class="step-badge">Phase 5</div>
+              <h3>Evaluation</h3>
+              <p>Rigorously evaluate holdout partitions using RMSE, RMSLE, MAE, and R² scores. Perform residual error analysis and analyze global feature importances across models.</p>
+            </div>
+
+            <div class="crisp-card">
+              <div class="step-badge">Phase 6</div>
+              <h3>Deployment</h3>
+              <p>Productionize inference via high-throughput FastAPI REST API with endpoints (/api/predict, /api/stats, /api/models, /api/routes) paired with this interactive Leaflet map interface.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

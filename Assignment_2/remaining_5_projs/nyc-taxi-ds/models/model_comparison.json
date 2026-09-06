@@ -1,0 +1,131 @@
+{
+  "dataset_info": {
+    "total_records": 20000,
+    "train_records": 16000,
+    "test_records": 4000,
+    "features_count": 20,
+    "features": [
+      "pickup_longitude",
+      "pickup_latitude",
+      "dropoff_longitude",
+      "dropoff_latitude",
+      "passenger_count",
+      "haversine_distance_km",
+      "manhattan_distance_km",
+      "bearing_degrees",
+      "pickup_hour",
+      "pickup_dayofweek",
+      "pickup_month",
+      "is_weekend",
+      "is_rush_hour",
+      "is_overnight",
+      "is_jfk_trip",
+      "is_lga_trip",
+      "is_ewr_trip",
+      "directness_ratio",
+      "lat_diff",
+      "lon_diff"
+    ]
+  },
+  "duration_models": {
+    "linear_regression": {
+      "model_name": "linear_regression",
+      "train_time_sec": 0.05,
+      "cv_rmse_mean": 380.322,
+      "cv_rmse_std": 3.994,
+      "cv_mae_mean": 276.243,
+      "cv_r2_mean": 0.7501,
+      "test_rmse": 395.326,
+      "test_rmsle": 0.3399,
+      "test_mae": 284.747,
+      "test_r2": 0.7462
+    },
+    "ridge": {
+      "model_name": "ridge",
+      "train_time_sec": 0.03,
+      "cv_rmse_mean": 380.422,
+      "cv_rmse_std": 3.97,
+      "cv_mae_mean": 276.269,
+      "cv_r2_mean": 0.7499,
+      "test_rmse": 395.323,
+      "test_rmsle": 0.3417,
+      "test_mae": 284.54,
+      "test_r2": 0.7462
+    },
+    "random_forest": {
+      "model_name": "random_forest",
+      "train_time_sec": 1.36,
+      "cv_rmse_mean": 318.869,
+      "cv_rmse_std": 2.448,
+      "cv_mae_mean": 218.148,
+      "cv_r2_mean": 0.8243,
+      "test_rmse": 329.522,
+      "test_rmsle": 0.2135,
+      "test_mae": 226.522,
+      "test_r2": 0.8237
+    },
+    "gradient_boosting": {
+      "model_name": "gradient_boosting",
+      "train_time_sec": 2.77,
+      "cv_rmse_mean": 309.193,
+      "cv_rmse_std": 1.086,
+      "cv_mae_mean": 211.5,
+      "cv_r2_mean": 0.8348,
+      "test_rmse": 322.904,
+      "test_rmsle": 0.2094,
+      "test_mae": 220.203,
+      "test_r2": 0.8307
+    }
+  },
+  "fare_models": {
+    "linear_regression": {
+      "model_name": "linear_regression",
+      "train_time_sec": 0.04,
+      "cv_rmse_mean": 2.642,
+      "cv_rmse_std": 0.019,
+      "cv_mae_mean": 1.904,
+      "cv_r2_mean": 0.9872,
+      "test_rmse": 2.731,
+      "test_rmsle": 0.0871,
+      "test_mae": 1.95,
+      "test_r2": 0.9869
+    },
+    "ridge": {
+      "model_name": "ridge",
+      "train_time_sec": 0.02,
+      "cv_rmse_mean": 2.649,
+      "cv_rmse_std": 0.017,
+      "cv_mae_mean": 1.909,
+      "cv_r2_mean": 0.9871,
+      "test_rmse": 2.738,
+      "test_rmsle": 0.088,
+      "test_mae": 1.955,
+      "test_r2": 0.9868
+    },
+    "random_forest": {
+      "model_name": "random_forest",
+      "train_time_sec": 1.58,
+      "cv_rmse_mean": 2.473,
+      "cv_rmse_std": 0.008,
+      "cv_mae_mean": 1.695,
+      "cv_r2_mean": 0.9888,
+      "test_rmse": 2.546,
+      "test_rmsle": 0.0661,
+      "test_mae": 1.732,
+      "test_r2": 0.9886
+    },
+    "gradient_boosting": {
+      "model_name": "gradient_boosting",
+      "train_time_sec": 3.31,
+      "cv_rmse_mean": 2.359,
+      "cv_rmse_std": 0.015,
+      "cv_mae_mean": 1.62,
+      "cv_r2_mean": 0.9898,
+      "test_rmse": 2.423,
+      "test_rmsle": 0.0629,
+      "test_mae": 1.64,
+      "test_r2": 0.9897
+    }
+  },
+  "timestamp": "2026-09-01 16:56:18"
+}

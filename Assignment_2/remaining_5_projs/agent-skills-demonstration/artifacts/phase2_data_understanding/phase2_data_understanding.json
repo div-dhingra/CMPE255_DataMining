@@ -1,0 +1,563 @@
+{
+  "crisp_dm_phase": "Phase 2: Data Understanding",
+  "status": "COMPLETED",
+  "skills_executed": [
+    "exploratory-data-analysis",
+    "programmatic-eda",
+    "pandas-patterns",
+    "data-quality-audit",
+    "schema-mapper",
+    "metric-reconciliation",
+    "query-validation",
+    "data-catalog-entry",
+    "sql-to-business-logic"
+  ],
+  "eda_summary": {
+    "dataset_shape": {
+      "rows": 7043,
+      "columns": 21
+    },
+    "target_distribution": {
+      "Yes": 1869,
+      "No": 5174,
+      "churn_rate_pct": 26.54
+    },
+    "missing_values": {
+      "customerID": 0,
+      "gender": 0,
+      "SeniorCitizen": 0,
+      "Partner": 0,
+      "Dependents": 0,
+      "tenure": 0,
+      "PhoneService": 0,
+      "MultipleLines": 0,
+      "InternetService": 0,
+      "OnlineSecurity": 0,
+      "OnlineBackup": 0,
+      "DeviceProtection": 0,
+      "TechSupport": 0,
+      "StreamingTV": 0,
+      "StreamingMovies": 0,
+      "Contract": 0,
+      "PaperlessBilling": 0,
+      "PaymentMethod": 0,
+      "MonthlyCharges": 0,
+      "TotalCharges": 0,
+      "Churn": 0
+    },
+    "numerical_profile": {
+      "tenure": {
+        "count": 7043,
+        "missing": 0,
+        "mean": 32.37,
+        "std": 24.56,
+        "min": 0.0,
+        "q25": 9.0,
+        "median": 29.0,
+        "q75": 55.0,
+        "max": 72.0,
+        "skewness": 0.24
+      },
+      "MonthlyCharges": {
+        "count": 7043,
+        "missing": 0,
+        "mean": 64.76,
+        "std": 30.09,
+        "min": 18.25,
+        "q25": 35.5,
+        "median": 70.35,
+        "q75": 89.85,
+        "max": 118.75,
+        "skewness": -0.22
+      },
+      "TotalCharges": {
+        "count": 7032,
+        "missing": 11,
+        "mean": 2283.3,
+        "std": 2266.77,
+        "min": 18.8,
+        "q25": 401.45,
+        "median": 1397.47,
+        "q75": 3794.74,
+        "max": 8684.8,
+        "skewness": 0.96
+      }
+    },
+    "categorical_profile": {
+      "gender": {
+        "unique_values": 2,
+        "top_categories": {
+          "Male": 3555,
+          "Female": 3488
+        }
+      },
+      "SeniorCitizen": {
+        "unique_values": 2,
+        "top_categories": {
+          "0": 5901,
+          "1": 1142
+        }
+      },
+      "Partner": {
+        "unique_values": 2,
+        "top_categories": {
+          "No": 3641,
+          "Yes": 3402
+        }
+      },
+      "Dependents": {
+        "unique_values": 2,
+        "top_categories": {
+          "No": 4933,
+          "Yes": 2110
+        }
+      },
+      "PhoneService": {
+        "unique_values": 2,
+        "top_categories": {
+          "Yes": 6361,
+          "No": 682
+        }
+      },
+      "MultipleLines": {
+        "unique_values": 3,
+        "top_categories": {
+          "No": 3390,
+          "Yes": 2971,
+          "No phone service": 682
+        }
+      },
+      "InternetService": {
+        "unique_values": 3,
+        "top_categories": {
+          "Fiber optic": 3096,
+          "DSL": 2421,
+          "No": 1526
+        }
+      },
+      "OnlineSecurity": {
+        "unique_values": 3,
+        "top_categories": {
+          "No": 3498,
+          "Yes": 2019,
+          "No internet service": 1526
+        }
+      },
+      "OnlineBackup": {
+        "unique_values": 3,
+        "top_categories": {
+          "No": 3088,
+          "Yes": 2429,
+          "No internet service": 1526
+        }
+      },
+      "DeviceProtection": {
+        "unique_values": 3,
+        "top_categories": {
+          "No": 3095,
+          "Yes": 2422,
+          "No internet service": 1526
+        }
+      },
+      "TechSupport": {
+        "unique_values": 3,
+        "top_categories": {
+          "No": 3473,
+          "Yes": 2044,
+          "No internet service": 1526
+        }
+      },
+      "StreamingTV": {
+        "unique_values": 3,
+        "top_categories": {
+          "No": 2810,
+          "Yes": 2707,
+          "No internet service": 1526
+        }
+      },
+      "StreamingMovies": {
+        "unique_values": 3,
+        "top_categories": {
+          "No": 2785,
+          "Yes": 2732,
+          "No internet service": 1526
+        }
+      },
+      "Contract": {
+        "unique_values": 3,
+        "top_categories": {
+          "Month-to-month": 3875,
+          "Two year": 1695,
+          "One year": 1473
+        }
+      },
+      "PaperlessBilling": {
+        "unique_values": 2,
+        "top_categories": {
+          "Yes": 4171,
+          "No": 2872
+        }
+      },
+      "PaymentMethod": {
+        "unique_values": 4,
+        "top_categories": {
+          "Electronic check": 2365,
+          "Mailed check": 1612,
+          "Bank transfer (automatic)": 1544,
+          "Credit card (automatic)": 1522
+        }
+      }
+    },
+    "correlation_matrix": {
+      "tenure": {
+        "tenure": 1.0,
+        "MonthlyCharges": 0.248,
+        "TotalCharges": 0.826
+      },
+      "MonthlyCharges": {
+        "tenure": 0.248,
+        "MonthlyCharges": 1.0,
+        "TotalCharges": 0.651
+      },
+      "TotalCharges": {
+        "tenure": 0.826,
+        "MonthlyCharges": 0.651,
+        "TotalCharges": 1.0
+      }
+    }
+  },
+  "pandas_patterns": {
+    "initial_memory_kb": 7975.08,
+    "optimized_memory_kb": 7494.46,
+    "memory_savings_pct": 6.03,
+    "vectorized_transforms_applied": [
+      "Vectorized string strip across all object columns",
+      "Vectorized coercion of TotalCharges whitespace to float32",
+      "Downcasting float64 features to float32",
+      "Downcasting integer flags to int8",
+      "Safe deep-copy memory indexing avoiding SettingWithCopyWarning"
+    ]
+  },
+  "data_quality_audit": {
+    "total_records_evaluated": 7043,
+    "total_features": 21,
+    "primary_key_unique": true,
+    "duplicate_records": 0,
+    "whitespace_anomalies_detected": 11,
+    "health_score": 74.0,
+    "status": "PASS",
+    "issues": [
+      {
+        "check": "whitespace_empty_strings",
+        "severity": "HIGH",
+        "field": "TotalCharges",
+        "corrupted_count": 11,
+        "pct": 0.156,
+        "root_cause": "Brand new customers with tenure=0 have spaces instead of 0.0 or null in TotalCharges."
+      }
+    ]
+  },
+  "schema_mapping": {
+    "schema_version": "1.0",
+    "primary_entity": "CustomerAccount",
+    "primary_key": "customerID",
+    "entities": {
+      "Customer": {
+        "entity_grain": "Single customer subscription account",
+        "primary_key": "customerID",
+        "attributes": [
+          "gender",
+          "SeniorCitizen",
+          "Partner",
+          "Dependents"
+        ]
+      },
+      "Subscription": {
+        "entity_grain": "Contractual telecommunication service bundle",
+        "attributes": [
+          "tenure",
+          "PhoneService",
+          "MultipleLines",
+          "InternetService",
+          "OnlineSecurity",
+          "OnlineBackup",
+          "DeviceProtection",
+          "TechSupport",
+          "StreamingTV",
+          "StreamingMovies",
+          "Contract"
+        ]
+      },
+      "Billing": {
+        "entity_grain": "Billing account charges and payment terms",
+        "attributes": [
+          "PaperlessBilling",
+          "PaymentMethod",
+          "MonthlyCharges",
+          "TotalCharges"
+        ]
+      },
+      "Outcome": {
+        "entity_grain": "Churn termination event",
+        "attributes": [
+          "Churn"
+        ]
+      }
+    },
+    "column_definitions": {
+      "customerID": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "7590-VHVEG",
+          "5575-GNVDE",
+          "3668-QPYBK"
+        ],
+        "category": "Categorical"
+      },
+      "gender": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "Female",
+          "Male"
+        ],
+        "category": "Categorical"
+      },
+      "SeniorCitizen": {
+        "data_type": "int64",
+        "null_count": 0,
+        "sample_values": [
+          "0",
+          "1"
+        ],
+        "category": "Categorical"
+      },
+      "Partner": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "Yes",
+          "No"
+        ],
+        "category": "Categorical"
+      },
+      "Dependents": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "No",
+          "Yes"
+        ],
+        "category": "Categorical"
+      },
+      "tenure": {
+        "data_type": "int64",
+        "null_count": 0,
+        "sample_values": [
+          "1",
+          "34",
+          "2"
+        ],
+        "category": "Numerical"
+      },
+      "PhoneService": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "No",
+          "Yes"
+        ],
+        "category": "Categorical"
+      },
+      "MultipleLines": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "No phone service",
+          "No",
+          "Yes"
+        ],
+        "category": "Categorical"
+      },
+      "InternetService": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "DSL",
+          "Fiber optic",
+          "No"
+        ],
+        "category": "Categorical"
+      },
+      "OnlineSecurity": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "No",
+          "Yes",
+          "No internet service"
+        ],
+        "category": "Categorical"
+      },
+      "OnlineBackup": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "Yes",
+          "No",
+          "No internet service"
+        ],
+        "category": "Categorical"
+      },
+      "DeviceProtection": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "No",
+          "Yes",
+          "No internet service"
+        ],
+        "category": "Categorical"
+      },
+      "TechSupport": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "No",
+          "Yes",
+          "No internet service"
+        ],
+        "category": "Categorical"
+      },
+      "StreamingTV": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "No",
+          "Yes",
+          "No internet service"
+        ],
+        "category": "Categorical"
+      },
+      "StreamingMovies": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "No",
+          "Yes",
+          "No internet service"
+        ],
+        "category": "Categorical"
+      },
+      "Contract": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "Month-to-month",
+          "One year",
+          "Two year"
+        ],
+        "category": "Categorical"
+      },
+      "PaperlessBilling": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "Yes",
+          "No"
+        ],
+        "category": "Categorical"
+      },
+      "PaymentMethod": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "Electronic check",
+          "Mailed check",
+          "Bank transfer (automatic)"
+        ],
+        "category": "Categorical"
+      },
+      "MonthlyCharges": {
+        "data_type": "float64",
+        "null_count": 0,
+        "sample_values": [
+          "29.85",
+          "56.95",
+          "53.85"
+        ],
+        "category": "Numerical"
+      },
+      "TotalCharges": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "29.85",
+          "1889.5",
+          "108.15"
+        ],
+        "category": "Numerical"
+      },
+      "Churn": {
+        "data_type": "str",
+        "null_count": 0,
+        "sample_values": [
+          "No",
+          "Yes"
+        ],
+        "category": "Target"
+      }
+    }
+  },
+  "metric_reconciliation": {
+    "records_reconciled": 7032,
+    "tenure_zero_unbilled_records": 11,
+    "mean_percentage_discrepancy": 3.21,
+    "max_percentage_discrepancy": 45.06,
+    "records_with_gt_10pct_discrepancy": 386,
+    "status": "RECONCILED_WITH_EXPLAINED_VARIANCE",
+    "explanation": "Discrepancies between tenure * MonthlyCharges and TotalCharges arise from historical promotional discounts, mid-term plan migrations, and taxes/fees not reflected in static current monthly fees."
+  },
+  "query_validation": {
+    "queries_reviewed": 2,
+    "all_valid": true,
+    "validated_queries": [
+      {
+        "query_name": "Monthly Churn Rate by Contract",
+        "sql": "\n                SELECT \n                    Contract,\n                    COUNT(customerID) AS total_customers,\n                    SUM(CASE WHEN Churn = 'Yes' THEN 1 ELSE 0 END) AS churned_customers,\n                    ROUND(SUM(CASE WHEN Churn = 'Yes' THEN 1.0 ELSE 0.0 END) / COUNT(customerID) * 100, 2) AS churn_rate_pct\n                FROM telco_customers\n                GROUP BY Contract\n                ORDER BY churn_rate_pct DESC;\n            ",
+        "status": "VALIDATED",
+        "review_notes": "Proper zero-division protection via COUNT(customerID) > 0, correct categorical grain."
+      },
+      {
+        "query_name": "Revenue at Risk by Payment Method",
+        "sql": "\n                SELECT \n                    PaymentMethod,\n                    COUNT(customerID) AS customer_count,\n                    ROUND(SUM(MonthlyCharges), 2) AS total_mrr,\n                    ROUND(SUM(CASE WHEN Churn = 'Yes' THEN MonthlyCharges ELSE 0 END), 2) AS churned_mrr\n                FROM telco_customers\n                GROUP BY PaymentMethod\n                ORDER BY churned_mrr DESC;\n            ",
+        "status": "VALIDATED",
+        "review_notes": "Accurate summation of Monthly Recurring Revenue, correct aggregation by payment tier."
+      }
+    ]
+  },
+  "data_catalog_entry": {
+    "asset_name": "telco_customer_churn_benchmark",
+    "owner": "Data Mining & Analytics Operations",
+    "description": "Historical IBM Telco customer account, contract, billing, and termination dataset.",
+    "refresh_cadence": "Monthly batch",
+    "total_attributes": 21,
+    "total_records": 7043,
+    "primary_key": "customerID",
+    "target_attribute": "Churn",
+    "sensitive_pii_fields": [
+      "None (Customer IDs are synthetic hashes)"
+    ]
+  },
+  "sql_to_business_logic": {
+    "churn_rate_logic": "Calculates the ratio of customers who terminated service within the measurement period to total active subscriptions.",
+    "arpu_logic": "Sums all recurring monthly charges divided by the number of active customer lines.",
+    "reconciliation_logic": "Flags discrepancies where recorded lifetime billing deviates by more than 10% from estimated tenure multiplied by monthly rate."
+  },
+  "generated_figures": [
+    "/Users/divdhingra-personal/Desktop/CMPE255_DataMining/Assignment_2/remaining_5_projs/agent-skills-demonstration/artifacts/figures/churn_distribution.png",
+    "/Users/divdhingra-personal/Desktop/CMPE255_DataMining/Assignment_2/remaining_5_projs/agent-skills-demonstration/artifacts/figures/tenure_distribution.png",
+    "/Users/divdhingra-personal/Desktop/CMPE255_DataMining/Assignment_2/remaining_5_projs/agent-skills-demonstration/artifacts/figures/numerical_correlations.png"
+  ]
+}

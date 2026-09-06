@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Associative Pattern Mining & Autoresearch Studio | CRISP-DM</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <!-- Vis.js for Network Graph Visualization -->
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <!-- Chart.js for Bubble Scatter & Trajectory Line Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand-title">
+      <span class="brand-badge">CRISP-DM</span>
+      <h1 class="brand-h1">Associative Pattern Mining & Autoresearch Studio</h1>
+    </div>
+
+    <div class="header-controls">
+      <div class="form-group">
+        <label class="form-label" for="dataset-select">Active Dataset:</label>
+        <select id="dataset-select" class="form-select">
+          <option value="retail">Kaggle Online Retail Sample</option>
+          <option value="synthetic">Synthetic Zipfian Benchmark</option>
+        </select>
+      </div>
+      <span class="badge" style="background:rgba(16,185,129,0.15); color:#34d399; border:1px solid rgba(16,185,129,0.3);">
+        ● System Healthy
+      </span>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="tab-navigation">
+    <button class="tab-btn active" data-view="crisp-dm-view">
+      <span>01</span> CRISP-DM Lifecycle & Audit
+    </button>
+    <button class="tab-btn" data-view="network-graph-view">
+      <span>02</span> Association Rule Network Graph
+    </button>
+    <button class="tab-btn" data-view="scatter-matrix-view">
+      <span>03</span> Rules Matrix Scatter & Mining
+    </button>
+    <button class="tab-btn" data-view="autoresearch-view">
+      <span>04</span> Autoresearch Studio & Papers
+    </button>
+    <button class="tab-btn" data-view="cart-simulator-view">
+      <span>05</span> Market Basket Recommendation Sandbox
+    </button>
+  </nav>
+
+  <!-- Main Workspace -->
+  <main class="main-content">
+
+    <!-- Global KPI Cards -->
+    <div class="stats-grid">
+      <div class="glass-panel stat-card">
+        <span class="stat-label">Total Transactions</span>
+        <span class="stat-val" id="stat-total-tx">-</span>
+        <span class="stat-sub">Parsed & cleaned invoices</span>
+      </div>
+      <div class="glass-panel stat-card">
+        <span class="stat-label">Unique Products</span>
+        <span class="stat-val" id="stat-total-items">-</span>
+        <span class="stat-sub">Active catalog items</span>
+      </div>
+      <div class="glass-panel stat-card">
+        <span class="stat-label">Average Basket Size</span>
+        <span class="stat-val" id="stat-avg-basket">-</span>
+        <span class="stat-sub">Items per transaction</span>
+      </div>
+      <div class="glass-panel stat-card">
+        <span class="stat-label">Matrix Density</span>
+        <span class="stat-val" id="stat-density">-</span>
+        <span class="stat-sub">Sparse transactional space</span>
+      </div>
+      <div class="glass-panel stat-card">
+        <span class="stat-label">Discovered Rules</span>
+        <span class="stat-val" id="stat-active-rules" style="color:#38bdf8;">-</span>
+        <span class="stat-sub">Active affinity patterns</span>
+      </div>
+    </div>
+
+    <!-- VIEW 1: CRISP-DM Lifecycle & Audit -->
+    <section id="crisp-dm-view" class="view-panel active">
+      <div class="glass-panel control-bar">
+        <div>
+          <h2 style="font-size:1.1rem; font-weight:700;">CRISP-DM Standard Process Framework</h2>
+          <p style="font-size:0.825rem; color:var(--text-secondary);">
+            End-to-end data mining lifecycle across all 6 standardized phases.
+          </p>
+        </div>
+        <a href="/docs" target="_blank" class="btn btn-secondary">OpenAPI Documentation &rarr;</a>
+      </div>
+
+      <!-- 6 Phase Cards -->
+      <div id="crisp-phases-container" class="crisp-phases-grid"></div>
+
+      <!-- Data Understanding & Synthetic Generator Section -->
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px; margin-top:24px;">
+        <div class="glass-panel" style="padding:20px;">
+          <h3 style="font-size:1rem; font-weight:600; margin-bottom:12px;">Top Catalog Items by Penetration</h3>
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Product Description</th>
+                  <th>Purchased Count</th>
+                  <th>Support</th>
+                  <th>Relative Popularity</th>
+                </tr>
+              </thead>
+              <tbody id="top-items-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass-panel" style="padding:20px; display:flex; flex-direction:column; gap:12px;">
+          <h3 style="font-size:1rem; font-weight:600;">Synthetic Benchmark Generator</h3>
+          <p style="font-size:0.8rem; color:var(--text-secondary);">
+            Generate controlled transactions with planted ground-truth affinity clusters and Zipfian frequency.
+          </p>
+          <div class="form-group" style="flex-direction:column; align-items:flex-start;">
+            <label class="form-label">Transaction Count:</label>
+            <input type="number" id="synth-tx-count" class="form-input" value="1000" style="width:100%;">
+          </div>
+          <div class="form-group" style="flex-direction:column; align-items:flex-start;">
+            <label class="form-label">Target Avg Basket Size:</label>
+            <input type="number" id="synth-avg-basket" class="form-input" value="4.2" step="0.1" style="width:100%;">
+          </div>
+          <div class="form-group" style="flex-direction:column; align-items:flex-start;">
+            <label class="form-label">Noise Level (0 - 1):</label>
+            <input type="number" id="synth-noise" class="form-input" value="0.25" step="0.05" style="width:100%;">
+          </div>
+          <button id="btn-generate-synthetic" class="btn btn-primary" style="margin-top:auto;">
+            Generate Synthetic Transactions
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: Association Rule Network Graph -->
+    <section id="network-graph-view" class="view-panel">
+      <div class="glass-panel control-bar">
+        <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+          <div class="form-group">
+            <label class="form-label">Search Product:</label>
+            <input type="text" id="graph-item-search" class="form-input" placeholder="Search item...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Min Lift Filter: <span id="graph-lift-val" style="color:var(--accent-cyan)">1.20</span>x</label>
+            <input type="range" id="graph-min-lift" min="1.0" max="4.0" step="0.05" value="1.20">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Max Rules:</label>
+            <select id="graph-max-rules" class="form-select">
+              <option value="25">25 Rules</option>
+              <option value="40" selected>40 Rules</option>
+              <option value="75">75 Rules</option>
+              <option value="120">120 Rules</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <input type="checkbox" id="graph-toggle-physics" checked> Live Physics
+            </label>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:14px; font-size:0.8rem; font-family:var(--font-mono);">
+          <div>Nodes: <strong id="graph-stat-nodes" style="color:#38bdf8;">-</strong></div>
+          <div>Edges: <strong id="graph-stat-edges" style="color:#34d399;">-</strong></div>
+          <div>Avg Lift: <strong id="graph-stat-avg-lift" style="color:#a78bfa;">-</strong></div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 3fr 1fr; gap:20px;">
+        <div class="glass-panel graph-container" id="vis-network-container"></div>
+
+        <div class="glass-panel" id="graph-inspector-panel" style="padding:20px;">
+          <div style="color:var(--text-muted); font-size:0.85rem;">
+            Click on any product node or directed rule edge in the network to inspect detailed metrics (Support, Confidence, Lift, Kulczynski, Conviction, Zhang).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: Rules Matrix Scatter & Mining -->
+    <section id="scatter-matrix-view" class="view-panel">
+      <!-- Mining Execution Controls -->
+      <div class="glass-panel control-bar">
+        <div class="form-group">
+          <label class="form-label">Algorithm:</label>
+          <select id="mine-alg" class="form-select">
+            <option value="fpgrowth" selected>FP-Growth (Han et al. 2000)</option>
+            <option value="apriori">Apriori (Agrawal 1994)</option>
+            <option value="eclat">ECLAT (Zaki 2000)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Min Support:</label>
+          <input type="number" id="mine-supp" class="form-input" value="0.03" step="0.005" min="0.005" max="0.5" style="width:80px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Min Confidence:</label>
+          <input type="number" id="mine-conf" class="form-input" value="0.40" step="0.05" min="0.1" max="0.95" style="width:80px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Min Lift:</label>
+          <input type="number" id="mine-lift" class="form-input" value="1.10" step="0.1" min="1.0" style="width:75px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max Length:</label>
+          <input type="number" id="mine-maxlen" class="form-input" value="3" min="2" max="5" style="width:60px;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">
+            <input type="checkbox" id="mine-prune" checked> Prune Redundant
+          </label>
+        </div>
+        <button id="btn-run-mining" class="btn btn-primary">Run Mining Execution</button>
+      </div>
+
+      <!-- Scatter Chart Canvas -->
+      <div class="glass-panel chart-box" style="height:420px; margin-bottom:24px;">
+        <h3 style="font-size:0.95rem; font-weight:600; margin-bottom:8px; color:#f8fafc;">
+          Rules Matrix: Support vs Confidence (Bubble Size = Lift, Color = Category)
+        </h3>
+        <canvas id="scatter-chart-canvas"></canvas>
+      </div>
+
+      <!-- Rules Table -->
+      <div class="glass-panel" style="padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:12px;">
+          <h3 style="font-size:1rem; font-weight:600;">Discovered Association Rules (7 Metrics)</h3>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <input type="text" id="matrix-search" class="form-input" placeholder="Filter rules...">
+            <select id="matrix-sort" class="form-select">
+              <option value="lift">Sort by Lift</option>
+              <option value="confidence">Sort by Confidence</option>
+              <option value="support">Sort by Support</option>
+              <option value="kulczynski">Sort by Kulczynski</option>
+              <option value="conviction">Sort by Conviction</option>
+              <option value="zhang">Sort by Zhang's Metric</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Association Rule (A &rArr; C)</th>
+                <th>Support</th>
+                <th>Confidence</th>
+                <th>Lift</th>
+                <th>Kulczynski</th>
+                <th>Conviction</th>
+                <th>Zhang</th>
+                <th>Imbalance Ratio</th>
+              </tr>
+            </thead>
+            <tbody id="rules-table-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: Autoresearch Studio & Papers -->
+    <section id="autoresearch-view" class="view-panel">
+      <!-- Autoresearch Controls -->
+      <div class="glass-panel control-bar">
+        <div>
+          <h2 style="font-size:1.1rem; font-weight:700;">Autoresearch Hill-Climbing Optimization Engine</h2>
+          <p style="font-size:0.825rem; color:var(--text-secondary);">
+            Closed-loop multi-objective optimization balancing rule coverage, interestingness, non-redundancy, and latency.
+          </p>
+        </div>
+
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <div class="form-group">
+            <label class="form-label">Steps:</label>
+            <input type="number" id="auto-batch-steps" class="form-input" value="12" min="1" max="50" style="width:70px;">
+          </div>
+          <button id="btn-auto-step" class="btn btn-secondary">Single Step</button>
+          <button id="btn-auto-batch" class="btn btn-primary">Run Batch Autoresearch</button>
+          <button id="btn-auto-apply" class="btn btn-emerald">Apply Best Config</button>
+          <button id="btn-auto-reset" class="btn btn-secondary" style="color:var(--accent-rose);">Reset</button>
+        </div>
+      </div>
+
+      <!-- Live Trajectory Chart -->
+      <div class="glass-panel chart-box" style="height:360px; margin-bottom:24px;">
+        <h3 style="font-size:0.95rem; font-weight:600; margin-bottom:8px; color:#f8fafc;">
+          Autonomous Convergence Trajectory: Composite Fitness F(&theta;) Over Search Iterations
+        </h3>
+        <canvas id="auto-trajectory-canvas"></canvas>
+      </div>
+
+      <!-- Experiment Leaderboard & Literature -->
+      <div style="display:grid; grid-template-columns: 3fr 2fr; gap:20px;">
+        <!-- Leaderboard -->
+        <div class="glass-panel" style="padding:20px;">
+          <h3 style="font-size:1rem; font-weight:600; margin-bottom:12px;">Autonomous Experiment Leaderboard</h3>
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Algorithm</th>
+                  <th>Fitness</th>
+                  <th>Min Supp</th>
+                  <th>Min Conf</th>
+                  <th>Min Lift</th>
+                  <th>Rules</th>
+                  <th>Latency</th>
+                </tr>
+              </thead>
+              <tbody id="auto-leaderboard-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Literature Alignment Cards -->
+        <div class="glass-panel" style="padding:20px;">
+          <h3 style="font-size:1rem; font-weight:600; margin-bottom:12px;">Research Paper Alignment</h3>
+          <div id="literature-cards-container" style="display:flex; flex-direction:column; gap:14px; max-height:480px; overflow-y:auto;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: Market Basket Recommendation Sandbox -->
+    <section id="cart-simulator-view" class="view-panel">
+      <div class="glass-panel control-bar">
+        <div>
+          <h2 style="font-size:1.1rem; font-weight:700;">Market Basket Recommendation Sandbox</h2>
+          <p style="font-size:0.825rem; color:var(--text-secondary);">
+            Interactive cart simulator executing real-time associative inference with explainable lift badges.
+          </p>
+        </div>
+
+        <div style="display:flex; gap:16px; align-items:center;">
+          <div>Projected Cross-Sell Uplift: <strong id="projected-uplift-pct" style="color:#34d399; font-size:1.1rem;">+0.0%</strong></div>
+          <div>Triggered Rules: <strong id="matched-rules-count" style="color:#38bdf8;">0 rules</strong></div>
+          <button id="btn-clear-cart" class="btn btn-secondary">Clear Basket</button>
+        </div>
+      </div>
+
+      <!-- Shopping Cart & Catalog Adder -->
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
+        <div class="glass-panel" style="padding:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <h3 style="font-size:1rem; font-weight:600;">Active Shopping Basket</h3>
+            <span id="cart-count-badge" class="badge" style="background:rgba(56,189,248,0.2); color:#38bdf8;">0 items</span>
+          </div>
+
+          <div id="active-cart-items" style="min-height:70px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:20px;">
+            <div style="color:var(--text-muted); font-size:0.85rem;">Your basket is empty. Select products below to simulate basket associations.</div>
+          </div>
+
+          <div class="form-group" style="border-top:1px solid rgba(255,255,255,0.06); padding-top:16px;">
+            <label class="form-label">Add Product from Catalog:</label>
+            <select id="catalog-item-select" class="form-select" style="flex:1;">
+              <option value="">Loading catalog items...</option>
+            </select>
+            <button id="btn-add-to-cart" class="btn btn-primary">+ Add to Basket</button>
+          </div>
+        </div>
+
+        <!-- ROI & Uplift Summary -->
+        <div class="glass-panel" style="padding:20px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <h3 style="font-size:1rem; font-weight:600; margin-bottom:8px;">Affinity Uplift Engine</h3>
+            <p style="font-size:0.8rem; color:var(--text-secondary); line-height:1.5;">
+              As products are added to the active basket, the inference engine filters all mined association rules whose antecedent $A \subseteq \text{Basket}$.
+            </p>
+          </div>
+          <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:14px; margin:14px 0;">
+            <div style="font-size:0.75rem; color:var(--text-muted);">RECOMMENDER STRATEGY</div>
+            <div style="font-size:0.9rem; font-weight:600; color:#f8fafc; margin-top:2px;">
+              Null-Invariant Kulczynski + Lift Ranking
+            </div>
+            <div style="font-size:0.75rem; color:#34d399; margin-top:4px;">
+              Resistant to high-frequency skew & null-transactions
+            </div>
+          </div>
+          <div style="font-size:0.75rem; color:var(--text-muted);">
+            Latency SLA: &lt; 5ms associative inference
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Recommendations Cards -->
+      <div style="margin-top:24px;">
+        <h3 style="font-size:1rem; font-weight:600;">Real-Time Recommended Bundles & Add-Ons</h3>
+        <div id="recommendations-grid" class="recs-grid"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- JavaScript Modules -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/crisp_dm_view.js"></script>
+  <script src="/static/js/network_graph.js"></script>
+  <script src="/static/js/scatter_matrix.js"></script>
+  <script src="/static/js/autoresearch_view.js"></script>
+  <script src="/static/js/cart_simulator.js"></script>
+</body>
+</html>

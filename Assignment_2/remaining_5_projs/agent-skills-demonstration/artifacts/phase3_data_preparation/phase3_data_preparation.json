@@ -1,0 +1,158 @@
+{
+  "crisp_dm_phase": "Phase 3: Data Preparation",
+  "status": "COMPLETED",
+  "skills_executed": [
+    "data-cleaning",
+    "feature-engineering",
+    "imbalanced-data",
+    "context-packager"
+  ],
+  "training_samples": 5634,
+  "testing_samples": 1409,
+  "engineered_feature_count": 26,
+  "engineered_features": [
+    "gender",
+    "SeniorCitizen",
+    "Partner",
+    "Dependents",
+    "tenure",
+    "PhoneService",
+    "MultipleLines",
+    "InternetService",
+    "OnlineSecurity",
+    "OnlineBackup",
+    "DeviceProtection",
+    "TechSupport",
+    "StreamingTV",
+    "StreamingMovies",
+    "Contract",
+    "PaperlessBilling",
+    "PaymentMethod",
+    "MonthlyCharges",
+    "TotalCharges",
+    "TenureCohort",
+    "ServiceBundleCount",
+    "HasFiberOptic",
+    "IsMonthToMonth",
+    "IsElectronicCheck",
+    "MonthlyToTotalRatio",
+    "HighSpendRisk"
+  ],
+  "cleaning_metadata": {
+    "train_imputed_missing_count": 8,
+    "test_imputed_missing_count": 3,
+    "imputation_strategy": "train_set_median",
+    "imputed_value": 1398.12,
+    "target_mapping": {
+      "No": 0,
+      "Yes": 1
+    },
+    "leakage_safety": "GUARANTEED: Imputation statistic learned exclusively from train_df"
+  },
+  "imbalance_handling": {
+    "original_distribution": {
+      "retained_0": 4139,
+      "churned_1": 1495
+    },
+    "imbalance_ratio": "2.77:1",
+    "balanced_class_weights": {
+      "0": 0.6806,
+      "1": 1.8843
+    },
+    "smote_resampled_distribution": {
+      "retained_0": 4139,
+      "churned_1": 4139
+    },
+    "synthetic_samples_generated": 2644
+  },
+  "context_package": {
+    "train_samples": 5634,
+    "test_samples": 1409,
+    "total_features": 26,
+    "numerical_features": [
+      "tenure",
+      "MonthlyCharges",
+      "TotalCharges",
+      "ServiceBundleCount",
+      "MonthlyToTotalRatio"
+    ],
+    "categorical_features": [
+      "gender",
+      "SeniorCitizen",
+      "Partner",
+      "Dependents",
+      "PhoneService",
+      "MultipleLines",
+      "InternetService",
+      "OnlineSecurity",
+      "OnlineBackup",
+      "DeviceProtection",
+      "TechSupport",
+      "StreamingTV",
+      "StreamingMovies",
+      "Contract",
+      "PaperlessBilling",
+      "PaymentMethod",
+      "TenureCohort",
+      "HasFiberOptic",
+      "IsMonthToMonth",
+      "IsElectronicCheck",
+      "HighSpendRisk"
+    ],
+    "cleaning_metadata": {
+      "train_imputed_missing_count": 8,
+      "test_imputed_missing_count": 3,
+      "imputation_strategy": "train_set_median",
+      "imputed_value": 1398.12,
+      "target_mapping": {
+        "No": 0,
+        "Yes": 1
+      },
+      "leakage_safety": "GUARANTEED: Imputation statistic learned exclusively from train_df"
+    },
+    "imbalance_metadata": {
+      "original_distribution": {
+        "retained_0": 4139,
+        "churned_1": 1495
+      },
+      "imbalance_ratio": "2.77:1",
+      "balanced_class_weights": {
+        "0": 0.6806,
+        "1": 1.8843
+      },
+      "smote_resampled_distribution": {
+        "retained_0": 4139,
+        "churned_1": 4139
+      },
+      "synthetic_samples_generated": 2644
+    },
+    "feature_list": [
+      "gender",
+      "SeniorCitizen",
+      "Partner",
+      "Dependents",
+      "tenure",
+      "PhoneService",
+      "MultipleLines",
+      "InternetService",
+      "OnlineSecurity",
+      "OnlineBackup",
+      "DeviceProtection",
+      "TechSupport",
+      "StreamingTV",
+      "StreamingMovies",
+      "Contract",
+      "PaperlessBilling",
+      "PaymentMethod",
+      "MonthlyCharges",
+      "TotalCharges",
+      "TenureCohort",
+      "ServiceBundleCount",
+      "HasFiberOptic",
+      "IsMonthToMonth",
+      "IsElectronicCheck",
+      "MonthlyToTotalRatio",
+      "HighSpendRisk"
+    ]
+  }
+}
