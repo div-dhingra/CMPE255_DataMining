@@ -29,7 +29,6 @@ For this part, I acted as an expert data scientist applying the CRISP-DM methodo
 For this part, I replicated the data science experiments provided in the course repository using my own AI coding assistant. 
 
 ### **All 6 Replicated Projects:**
-Link to existing file-path in same repo, edit inside GitHub exposes @tags for the file :P
 * **Generated Code/Notebook:** [View Replicated Code](https://github.com/div-dhingra/CMPE255_DataMining/tree/main/Assignment_2/proj_3)
 * **Generated Code/Notebook:** [View Replicated Code](https://github.com/div-dhingra/CMPE255_DataMining/tree/main/Assignment_2/remaining_5_projs/llm-chatbot-autoresearch)
 * **Generated Code/Notebook:** [View Replicated Code](https://github.com/div-dhingra/CMPE255_DataMining/tree/main/Assignment_2/remaining_5_projs/associative-pattern-mining)
